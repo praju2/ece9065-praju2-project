@@ -58,7 +58,9 @@ exports.authenticate_user = function (req, res, next) {
                         const payload = {
                             id: user._id,
                             name: user.username,
-                            email: user.email
+                            email: user.email,
+                            role : user.role,
+                            active : user.active
                         };
                         jwt.sign(payload, secret, { expiresIn: 36000 },
                             (err, token) => {

@@ -10,6 +10,7 @@ const open = require('./routes/open.route');
 const admin = require('./routes/admin.route');
 const secure = require('./routes/secure.route');
 const logger = require('./middlewares/logger');
+const validateRouteAccess=require('./middlewares/validateRouteAccess.middleware');
 const env_path=process.cwd()+'\\config\\env-config.env';
 require('dotenv').config({path : env_path}); 
 
@@ -52,8 +53,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use('/api/open', open);
-app.use('/api/admin', passport.authenticate('jwt', {session: false}), admin);
-app.use('/api/secure',passport.authenticate('jwt', {session: false}), secure);
+app.use('/api/admin',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('admin')], admin);
+app.use('/api/secure',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('user')], secure);
 
 
 

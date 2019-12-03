@@ -8,7 +8,7 @@ const playlist_controller = require('../controllers/playlist.controller');
 
 router.put('/user', user_controller.modify_user);
 router.post('/user', user_controller.create_user);
-router.post('/user/authenticate', user_controller.authenticate_user);
+
 
 router.get('/song', song_controller.song_all);
 router.post('/song', song_controller.song_create);

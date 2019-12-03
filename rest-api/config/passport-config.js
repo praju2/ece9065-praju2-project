@@ -15,14 +15,16 @@ const opts = {
 // and also defines the key to be used when verifying the token.
 module.exports = passport => {
     passport.use(
-        new Strategy(opts, (payload, done) => {
+        new Strategy(opts, (payload, done) => {           
             User.findById(payload.id)
                 .then(user => {
                     if (user) {
                         return done(null, {
                             id: user._id,
                             name: user.username,
-                            email: user.email
+                            email: user.email,
+                            role : user.role,
+                            active : user.active
                         });
                     }
                     return done(null, false);
