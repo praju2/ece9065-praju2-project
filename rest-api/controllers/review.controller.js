@@ -1,5 +1,4 @@
 const Review = require('../models/review.model');
-const song_controller = require('./song.controller');
 const Song = require('../models/song.model');
 
 exports.review_details = function (req, res, next) {

@@ -1,14 +1,20 @@
 const express = require('express');
-var bodyParser = require('body-parser');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-// //const expressSanitizer = require('express-sanitizer');
+
+
 const open = require('./routes/open.route');
 const admin = require('./routes/admin.route');
 const secure = require('./routes/secure.route');
-
 const logger = require('./middlewares/logger');
+const env_path=process.cwd()+'\\config\\env-config.env';
+require('dotenv').config({path : env_path}); 
+
 const app = express();
+
 
 // Set up mongoose connection
 let dev_db_url = '';
@@ -24,6 +30,9 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
+app.use(passport.initialize());
+require('./config/passport-config')(passport);
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -33,20 +42,22 @@ app.use(function (req, res, next) {
 
 
 
-
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
-//app.use(express.json());
 
-// app.use('/', express.static(__dirname));//Index file placed in base directory
+
+
+
+
 app.use('/api/open', open);
-app.use('/api/admin', admin);
-app.use('/api/secure', secure);
-// app.use('/library/dueDate', dueDate);
+app.use('/api/admin', passport.authenticate('jwt', {session: false}), admin);
+app.use('/api/secure',passport.authenticate('jwt', {session: false}), secure);
 
-const port = process.env.PORT || 8080;
+
+
+const port = process.env.PORT ;
 app.listen(port, () => logger(`Listening on port ${port}`)); // start server // set env variable laster
 
 
