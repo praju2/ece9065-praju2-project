@@ -1,3 +1,7 @@
+*.ps1
+*.jshintrc
+*.env
+
 # Logs
 logs
 *.log
