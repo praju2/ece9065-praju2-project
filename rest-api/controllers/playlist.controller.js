@@ -17,12 +17,13 @@ exports.user_playlist = function (req, res, next) {
 
 
 exports.details = function (req, res, next) {
-    Playlist.findById(req.params.playlist_id).populate({
+    console.log('req.params.playlist_id',req.params.playlist_id);
+    Playlist.findById(req.params.playlist_id).select('songs').populate({
         path: 'songs',
         populate: { path: 'Reviews', options: { sort: { _id: -1 }, limit: 2 }, populate: { path: 'user_id' } }
     }).exec(function (err, playlist) {
         if (err) return next(err);
-        res.send(playlist);
+        res.send(playlist.songs);
     });
 };
 
