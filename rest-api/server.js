@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const joi = require('@hapi/joi');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 
 const open = require('./routes/open.route');
@@ -15,7 +16,7 @@ const env_path=process.cwd()+'\\config\\env-config.env';
 require('dotenv').config({path : env_path}); 
 
 const app = express();
-
+app.use(cors());
 
 // Set up mongoose connection
 let dev_db_url = '';
@@ -54,8 +55,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/open', open);
 app.use('/api/admin',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('admin')], admin);
-app.use('/api/secure',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('user')], secure);
-
+//app.use('/api/secure',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('user')], secure);
+app.use('/api/secure', secure);
 
 
 const port = process.env.PORT ;
