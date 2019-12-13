@@ -1,4 +1,5 @@
 const Song = require('../models/song.model');
+const Fuse = require('fuse.js');
 const review_controller = require('./review.controller');
 
 exports.song_all = function (req, res, next) {
@@ -15,6 +16,54 @@ exports.top_n_songs = function (req, res, next) {
         res.send(item);
     });
 };
+
+//https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+//https://fusejs.io/
+exports.fuzzy_search = function (req, res, next) {
+    Song.find(
+        { $text: { $search: req.params.search_key } },
+        { score: { $meta: "textScore" } }
+    )
+        .sort({ score: { $meta: 'textScore' } })
+        .exec(function (err, item) {
+            if (err) return next(err);
+            if (item.length != 0) {
+                res.send(item);
+            }
+            else {
+                Song.find({}).exec(function (err, item) {
+                    if (err) {return next(err);}
+                    else {
+                        var options = {
+                            shouldSort: true,
+                            threshold: 0.4,
+                            location: 0,
+                            distance: 100,
+                            maxPatternLength: 32,
+                            minMatchCharLength: 3,
+                            keys: [
+                              "Title",
+                              "Artist",
+                              "Album",
+                              "Genre",
+                              "Year",
+                              "Track"
+                            ]
+                          };
+                          var fuse = new Fuse(item, options); // "list" is the item array
+                          item = fuse.search(req.params.search_key);
+                          res.send(item);
+                    }
+                    
+                });
+
+
+            }
+
+        });
+
+};
+
 
 exports.details = function (req, res, next) {
     Song.findById(req.params.id).populate({ path: 'Reviews', options: { sort: { _id: -1 }, limit: 2 }, populate: { path: 'user_id' } }).exec(function (err, item) {

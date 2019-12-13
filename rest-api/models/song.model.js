@@ -14,7 +14,7 @@ let songSchema = new Schema({
     Hidden: { type: Boolean, required: true, default: false },
 }, { collection: 'songs' });
 
-
+songSchema.index({ Title: 'text', Artist: 'text', Album: 'text', Genre: 'text' }, {name: 'Song Index', weights: {Title: 10, Artist: 4, Album: 2, Genre: 1}});
 // Export the model
 module.exports = mongoose.model('Song', songSchema);
 //module.exports.schema = songSchema;
