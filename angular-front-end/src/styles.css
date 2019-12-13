@@ -1,121 +1,17 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
-header {
-  display: block;
-  height: 100px;
-}
-header .nav-bar nav {
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+ nav {
   background-color: #561b8d;
   width: 100%;
   height: 43px;
   margin: 0px;
 }
-header .nav-bar nav .nav-container {
-  position: relative;
-  top: 30%;
-}
-header .nav-bar nav a {
-  color: white;
-  text-decoration: none;
-}
-header .nav-bar nav ul {
-  list-style-type: none;
-  margin: 0;
-  display: flex;
-}
-header .nav-bar nav ul li a {
-  padding: 0.9em;
-}
-header .nav-bar nav ul li a:hover {
-  background: #3c1362;
-}
-.container {
-  margin-top: 3em;
-}
-body {
-  background: 50% 0 no-repeat #f5f5f5;
-  color: #808080;
-  font-size: 100%;
-  height: auto;
-  margin: 8px 0px;
-}
-.form-group {
-  box-sizing: border-box;
-  margin-bottom: 15px;
-}
-.form-control {
-  box-sizing: border-box;
-  width: 100%;
-  height: 34px;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  color: #555;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
-    -webkit-box-shadow ease-in-out 0.15s;
-}
-.form-error-msg {
-  color: red;
-}
-.form-mandatory-input {
-  color: red;
-}
-.invalid {
-  background-color: #f39292;
-}
-.user-info {
-  position: absolute;
-  height: 100px;
-  width: 20%;
-  top: 0;
-  right: 0;
-  margin: 15px auto;
-  word-wrap: break-word;
-}
-.user-info .disp-text {
-  color: #0300ca;
-}
-img {
-  border: 0;
-  max-width: 100%;
-  color: transparent;
-  vertical-align: middle;
-}
-img.logo_img {
-  margin: 0 10px 20px;
-}
-img.user_img {
-  position: absolute;
-  width: 100px;
-  top: 0;
-  right: 20%;
-}
-img.item_img {
-  height: 180px;
-  width: 180px;
-  float: left;
-  vertical-align: top;
-  margin-top: 20px;
-}
+
 h1,
 h2,
 h3 {
   font-family: Roboto, sans-serif;
   color: #561b8d;
 }
-button {
-  box-sizing: border-box;
-  border: none;
-  border-radius: 4px;
-  width: 15%;
-  color: white;
-  padding: 6px 6px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
+
