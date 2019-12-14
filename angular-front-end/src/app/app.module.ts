@@ -16,6 +16,7 @@ import { MatInputModule,MatProgressSpinnerModule } from '@angular/material'
 import {MatDialogModule} from '@angular/material/dialog';
 import { ReviewComponent } from './review/review.component';
 import { OpenService } from './services/open.service';
+import { SongService } from './services/song.service';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SpeicalEventsComponent } from './speical-events/speical-events.component';
@@ -48,7 +49,7 @@ import { AuthGuard } from './auth.guard';
     MatDialogModule,
     MatProgressSpinnerModule
   ],
-  providers: [OpenService,AuthGuard],
+  providers: [OpenService,AuthGuard,SongService],
   bootstrap: [AppComponent],
   entryComponents:[ReviewComponent]
 })

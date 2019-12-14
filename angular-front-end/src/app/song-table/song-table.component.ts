@@ -9,7 +9,8 @@ import { OpenService } from '../services/open.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
 import { ReviewComponent } from '../review/review.component';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, timeInterval } from 'rxjs/operators';
+import { SongService } from '../services/song.service';
 
 @Component({
   selector: 'app-song-table',
@@ -37,14 +38,15 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor(private _http: OpenService, private dialog: MatDialog) {
+  constructor(private _http: OpenService, private dialog: MatDialog, private _song: SongService) {
 
   }
 
   ngOnInit() {
     this.dataSource = new SongTableDataSource(this._http);
-
-    this.dataSource.getTop10Songs();
+    if (this._song.module === "") {
+      this.dataSource.getTop10Songs();
+    }
 
   }
 
@@ -63,6 +65,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   @HostListener('window:beforeunload')
   ngOnDestroy() {
+
     if (this.dataSource.findSongsSubs) {
       this.dataSource.findSongsSubs.unsubscribe();
     }

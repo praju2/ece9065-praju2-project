@@ -6,6 +6,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { PlaylistTableDataSource } from './playlist-table-datasource';
 import { Playlist } from '../models/playlist.model';
 import { OpenService } from '../services/open.service';
+import { SongService } from '../services/song.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
 import { ReviewComponent } from '../review/review.component';
@@ -30,22 +31,23 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatTable, { static: false }) table: MatTable<Playlist>;
   @ViewChild('input', { static: false }) input: ElementRef;
-  @ViewChild(SongTableComponent, { static: false }) child: SongTableComponent;
   @ViewChildren(SongTableComponent) SongTableComponentList: QueryList<SongTableComponent>;
   dataSource: PlaylistTableDataSource;
+
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   columnsToDisplay = ['playlist_title', 'playlist_desc'];
   expandedElement: Playlist | null;
 
-  constructor(private _http: OpenService, private dialog: MatDialog, private elementRef: ElementRef) {
-
+  constructor(private _http: OpenService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
+    this._song.module = "playlist";
   }
 
 
   ngOnInit() {
     this.dataSource = new PlaylistTableDataSource(this._http);
     this.dataSource.findUserPlaylists(1, "", "", 0, 0);
+
   }
 
   ngAfterViewInit() {
@@ -71,6 +73,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   }
   @HostListener('window:beforeunload')
   ngOnDestroy() {
+    this._song.module = "";
     if (this.dataSource.findUserPlaylistsSubs) {
       this.dataSource.findUserPlaylistsSubs.unsubscribe();
 
@@ -79,10 +82,8 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
 
   loadPlaylistSongs(expandedElement) {
     this.SongTableComponentList.forEach(instance => {
-      instance.loadPlaylistSongs(expandedElement._id);
+       instance.loadPlaylistSongs(expandedElement._id);
     });
-
-    //this.child.loadPlaylistSongs(expandedElement._id);
   }
 
   findSongs() {
