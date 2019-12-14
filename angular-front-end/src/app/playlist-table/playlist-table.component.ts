@@ -9,7 +9,7 @@ import { OpenService } from '../services/open.service';
 import { SongService } from '../services/song.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
-import { ReviewComponent } from '../review/review.component';
+import { ReviewComponent } from '../song-table/review/review.component';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { SongTableComponent } from '../song-table/song-table.component';
 

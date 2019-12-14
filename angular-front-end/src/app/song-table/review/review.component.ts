@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Review } from '../models/review.model';
-import { OpenService } from '../services/open.service';
+import { Review } from '../../models/review.model';
+import { OpenService } from '../../services/open.service';
 import { Subscription } from 'rxjs';
 import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material';
-import { Song } from '../models/song.model';
+import { Song } from '../../models/song.model';
 
 @Component({
   selector: 'app-review',

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpeicalEventsComponent } from './speical-events.component';
+import { SongAddEditComponent } from './song-add-edit.component';
 
-describe('SpeicalEventsComponent', () => {
-  let component: SpeicalEventsComponent;
-  let fixture: ComponentFixture<SpeicalEventsComponent>;
+describe('SongAddEditComponent', () => {
+  let component: SongAddEditComponent;
+  let fixture: ComponentFixture<SongAddEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SpeicalEventsComponent ]
+      declarations: [ SongAddEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpeicalEventsComponent);
+    fixture = TestBed.createComponent(SongAddEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './home-dash/home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,12 +14,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ReviewComponent } from './review/review.component';
+import { ReviewComponent } from './song-table/review/review.component';
 import { OpenService } from './services/open.service';
 import { SongService } from './services/song.service';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './login/register/register.component';
 import { LoginComponent } from './login/login.component';
-import { SpeicalEventsComponent } from './speical-events/speical-events.component';
 import { PlaylistTableComponent } from './playlist-table/playlist-table.component';
 import { AuthGuard } from './guard/auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
@@ -28,6 +27,14 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { HomeDashComponent } from './home-dash/home-dash.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
+import { SongAddEditComponent } from './song-table/song-add-edit/song-add-edit.component';
 
 // 2. Add your credentials from step 1
 const firebaseConfig = {
@@ -48,9 +55,10 @@ const firebaseConfig = {
     SongTableComponent,
     ReviewComponent,
     RegisterComponent,
-    LoginComponent,
-    SpeicalEventsComponent,
-    PlaylistTableComponent
+    LoginComponent,  
+    PlaylistTableComponent,
+    HomeDashComponent,
+    SongAddEditComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +77,7 @@ const firebaseConfig = {
     // 3. Initialize
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule, // firestore
-    AngularFireAuthModule // auth
+    AngularFireAuthModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule // auth
 
   ],
   providers: [OpenService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],

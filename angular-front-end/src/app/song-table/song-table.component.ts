@@ -8,9 +8,10 @@ import { Song } from '../models/song.model';
 import { OpenService } from '../services/open.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
-import { ReviewComponent } from '../review/review.component';
+import { ReviewComponent } from './review/review.component';
 import { debounceTime, distinctUntilChanged, tap, timeInterval } from 'rxjs/operators';
 import { SongService } from '../services/song.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-song-table',
@@ -33,12 +34,12 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource: SongTableDataSource;
   subscription: Subscription;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['Ranking', 'Title', 'Artist'];
+  columnsToDisplay = ['Ranking', 'Title', 'Artist', ' '];
   expandedElement: Song | null;
 
 
 
-  constructor(private _http: OpenService, private dialog: MatDialog, private _song: SongService) {
+  constructor(private _http: OpenService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService) {
 
   }
 
@@ -79,7 +80,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   findSongs(filter: string) {
     if (filter !== '') {
-      this.columnsToDisplay = ['Title', 'Artist'];
+      this.columnsToDisplay = ['Title', 'Artist', ' '];
       this.dataSource.findSongs(
         1,
         filter,
@@ -87,7 +88,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
         0,
         0);
     } else {
-      this.columnsToDisplay = ['Ranking', 'Title', 'Artist'];
+      this.columnsToDisplay = ['Ranking', 'Title', 'Artist', ' '];
 
       this.dataSource.getTop10Songs();
     }
@@ -108,7 +109,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadPlaylistSongs(element = '') {
     this.dataSource.loadPlaylistSongs(element);
-    this.columnsToDisplay = ['Title', 'Artist'];
+    this.columnsToDisplay = ['Title', 'Artist', ' '];
 
   }
 }

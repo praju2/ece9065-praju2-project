@@ -1,0 +1,17 @@
+<div class="grid-container">
+  <mat-grid-list cols="2" rowHeight="350px">
+    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="card.title==='Songs'"><app-home></app-home></div>   
+          <div *ngIf="card.title==='About'"><p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non ipsum id metus cursus ornare non at erat. Duis ultrices at lectus eget pellentesque. Nunc id facilisis purus, eget ornare eros. Morbi non ullamcorper augue. Morbi ullamcorper accumsan justo sed mattis. Sed a tempor sapien. Ut imperdiet enim vitae nulla viverra, ornare malesuada ligula luctus. Nulla quis suscipit nulla. Maecenas eleifend turpis eu faucibus interdum. Cras convallis nibh a dui consequat sodales.
+        </p>
+        </div> 
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
