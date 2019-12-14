@@ -10,7 +10,7 @@ import { SongTableComponent } from '../song-table/song-table.component';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('input', { static: false }) input: ElementRef;
-  @ViewChild(SongTableComponent, { static: false }) child:SongTableComponent;
+  @ViewChild(SongTableComponent, { static: false }) child: SongTableComponent;
 
   constructor() { }
 

@@ -2,7 +2,7 @@ import { Review } from './review.model';
 
 export interface Song {
     Reviews: Review[];
-    Hidden:boolean;
+    Hidden: boolean;
     _id: string;
     Title: string;
     Artist: string;
@@ -10,6 +10,6 @@ export interface Song {
     Track: number;
     Year: number;
     Length: number;
-    Genre: string;  
+    Genre: string;
     Rating: number;
 }

@@ -40,20 +40,17 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   expandedElement: Playlist | null;
 
   constructor(private _http: OpenService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
-    this._song.module = "playlist";
+    this._song.module = 'playlist';
   }
 
 
   ngOnInit() {
     this.dataSource = new PlaylistTableDataSource(this._http);
-    this.dataSource.findUserPlaylists(1, "", "", 0, 0);
+    this.dataSource.findUserPlaylists(1, '', '', 0, 0);
 
   }
 
   ngAfterViewInit() {
-
-
-
     // server-side search
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
@@ -64,16 +61,11 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
         })
       )
       .subscribe();
-
-    // this.elementRef.nativeElement.querySelector('.example-element-row')
-    //   .addEventListener('click', this.loadPlaylistSongs.bind(this));
-
-
-
   }
+
   @HostListener('window:beforeunload')
   ngOnDestroy() {
-    this._song.module = "";
+    this._song.module = null;
     if (this.dataSource.findUserPlaylistsSubs) {
       this.dataSource.findUserPlaylistsSubs.unsubscribe();
 
@@ -81,25 +73,26 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   loadPlaylistSongs(expandedElement) {
-    this.SongTableComponentList.forEach(instance => {
-       instance.loadPlaylistSongs(expandedElement._id);
-    });
+    if (expandedElement) {
+      this.SongTableComponentList.forEach(instance => {
+        instance.loadPlaylistSongs(expandedElement._id);
+      });
+    }
   }
 
   findSongs() {
-    if (this.input.nativeElement.value !== "") {
+    if (this.input.nativeElement.value !== '') {
       this.dataSource.findUserPlaylists(
         1,
         this.input.nativeElement.value,
-        "",
+        '',
         0,
         0);
-    }
-    else {
+    } else {
       this.dataSource.findUserPlaylists(
         1,
         this.input.nativeElement.value,
-        "",
+        '',
         0,
         0);
     }
@@ -113,7 +106,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.disableClose=true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "60%";
+    dialogConfig.width = '60%';
     dialogConfig.data = element;
     this.dialog.open(ReviewComponent, dialogConfig);
   }

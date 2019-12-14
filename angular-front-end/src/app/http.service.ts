@@ -8,14 +8,11 @@ import { Song } from './models/song.model';
 })
 export class HttpService {
 
- constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   getSongs() {
-    //console.log("his");
-    //return this.http.get('https://api.openbrewerydb.org/breweries'); 
     return this.http.get<Song[]>('http://localhost:8080/api/open/song/top_n');
-  
-}
+  }
 
 
 

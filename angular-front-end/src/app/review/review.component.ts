@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy,Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Review } from '../models/review.model';
 import { OpenService } from '../services/open.service';
 import { Subscription } from 'rxjs';
-import { MatDialogRef, MatDialogConfig,MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material';
 import { Song } from '../models/song.model';
 
 @Component({
@@ -10,21 +10,18 @@ import { Song } from '../models/song.model';
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
-export class ReviewComponent implements OnInit,OnDestroy {
+export class ReviewComponent implements OnInit, OnDestroy {
   reviews: Review[];
-  subscription:Subscription;
-  song:Song;
-  constructor(private _http : OpenService,
-  @Inject(MAT_DIALOG_DATA) data:Song
-    ) { this.song=data; }
+  subscription: Subscription;
+  song: Song;
+  constructor(private _http: OpenService, @Inject(MAT_DIALOG_DATA) data: Song) { this.song = data; }
 
   ngOnInit() {
-    this.subscription=this._http.getReviews(this.song._id).subscribe(data=>{
-      this.reviews=data;
-    })
+    this.subscription = this._http.getReviews(this.song._id).subscribe(data => {
+      this.reviews = data;
+    });
   }
-  ngOnDestroy()
-  { 
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

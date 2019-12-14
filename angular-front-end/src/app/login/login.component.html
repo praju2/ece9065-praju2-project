@@ -18,7 +18,30 @@
                             <input type="password" [(ngModel)]="userData.password" name="password"
                                 class="form-control rounded-2" required>
                         </div>
-                        <button type="button" (click)="loginUser()" class="btn btn-success float-right">Login</button>
+                        <div class="d-flex justify-content-start flex-row bd-highlight mb-3">                  
+                            <button type="button" routerLink="/register" routerLinkActive="active" class="btn btn-success">Register</button>
+                            <button type="button" (click)="loginUser()" class="btn btn-success">Login</button>                            
+                        </div>  
+                    <div *ngIf="_auth.user$ | async; then authenticated else guest">
+                            <!-- template will replace this div -->
+                    </div>
+                    
+                    <!-- User NOT logged in -->
+                    <ng-template #guest>
+                        <button (click)="_auth.googleSignin()">
+                            <i class="fa fa-google"></i> Connect Google
+                        </button>
+                    </ng-template>
+                    
+                    
+                    <!-- User logged in -->
+                    <ng-template #authenticated>
+                        <div *ngIf="_auth.user$ | async as user">
+                            <h3>Howdy, {{ user.username }}</h3>
+                            <button (click)="_auth.signOut()">Logout</button>
+                        </div>
+                    </ng-template>                  
+
                     </form>
                 </div>
             </div>

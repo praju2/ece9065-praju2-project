@@ -44,7 +44,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource = new SongTableDataSource(this._http);
-    if (this._song.module === "") {
+    if (this._song.module == null) {
       this.dataSource.getTop10Songs();
     }
 
@@ -78,16 +78,15 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   findSongs(filter: string) {
-    if (filter !== "") {
+    if (filter !== '') {
       this.columnsToDisplay = ['Title', 'Artist'];
       this.dataSource.findSongs(
         1,
         filter,
-        "",
+        '',
         0,
         0);
-    }
-    else {
+    } else {
       this.columnsToDisplay = ['Ranking', 'Title', 'Artist'];
 
       this.dataSource.getTop10Songs();
@@ -102,13 +101,12 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.disableClose=true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "60%";
+    dialogConfig.width = '60%';
     dialogConfig.data = element;
     this.dialog.open(ReviewComponent, dialogConfig);
   }
 
   loadPlaylistSongs(element = '') {
-    console.log("selected playlist", element)
     this.dataSource.loadPlaylistSongs(element);
     this.columnsToDisplay = ['Title', 'Artist'];
 

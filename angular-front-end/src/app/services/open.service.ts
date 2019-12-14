@@ -21,51 +21,47 @@ export class OpenService {
     return this.http.get<Song[]>('http://localhost:8080/api/open/song/top_n');
 
   }
- 
+
 
   findSongs(
-    songId:number, filter = '', sortOrder = 'asc',
-    pageNumber = 0, pageSize = 0):  Observable<Song[]> {
+    songId: number, filter = '', sortOrder = 'asc',
+    pageNumber = 0, pageSize = 0): Observable<Song[]> {
 
     return this.http.get(`http://localhost:8080/api/open/song/search/${filter}`, {
     }).pipe(map(res => {
       res['payload'] = res;
-      return res["payload"];
-      })
-      );
+      return res['payload'];
+    })
+    );
   }
 
-  loadPlaylistSongs(
-    playlist_id:string, filter = '', sortOrder = 'asc',
-    pageNumber = 0, pageSize = 0):  Observable<Song[]> {
+  loadPlaylistSongs(playlist_id: string, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Song[]> {
 
     return this.http.get(`http://localhost:8080/api/secure/playlist/${playlist_id}`, {
-    }).pipe(map(res => { 
+    }).pipe(map(res => {
       res['payload'] = res;
-      return res["payload"];
-      })
-      );
+      return res['payload'];
+    })
+    );
   }
-  getTop10Songs():  Observable<Song[]> {
+  getTop10Songs(): Observable<Song[]> {
 
     return this.http.get('http://localhost:8080/api/open/song/top_n', {
     }).pipe(map(res => {
       res['payload'] = res;
-      return res["payload"];
-      })
-      );
+      return res['payload'];
+    })
+    );
   }
 
-  findUserPlaylists(
-    songId:number, filter = '', sortOrder = 'asc',
-    pageNumber = 0, pageSize = 0):  Observable<Playlist[]> {
+  findUserPlaylists(songId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
 
     return this.http.get(`http://localhost:8080/api/secure/playlist/user/5de2ccd21c9d440000dd95b2`, {
     }).pipe(map(res => {
       res['payload'] = res;
-      return res["payload"];
-      })
-      );
+      return res['payload'];
+    })
+    );
   }
- 
- }
+
+}

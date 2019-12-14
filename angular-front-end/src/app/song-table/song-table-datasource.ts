@@ -17,8 +17,8 @@ export class SongTableDataSource extends DataSource<Song> {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   private songsloadingSubject = new BehaviorSubject<boolean>(false);
   findSongsSubs: Subscription;
-  topSongsSubs :Subscription;
-  loadPlaylistSongsSubs:Subscription; 
+  topSongsSubs: Subscription;
+  loadPlaylistSongsSubs: Subscription;
 
   public songs$ = this.songsSubject.asObservable();
 
@@ -39,11 +39,10 @@ export class SongTableDataSource extends DataSource<Song> {
   }
 
 
-  findSongs(songId: number, filter = '',
-    sortDirection = 'asc', pageIndex = 0, pageSize = 3) {
+  findSongs(songId: number, filter = '', sortDirection = 'asc', pageIndex = 0, pageSize = 3) {
     this.songsloadingSubject.next(true);
 
-     this.findSongsSubs=this._http.findSongs(songId, filter, sortDirection,
+    this.findSongsSubs = this._http.findSongs(songId, filter, sortDirection,
       pageIndex, pageSize).pipe(
         catchError(() => of([])),
         finalize(() => this.songsloadingSubject.next(false))
@@ -55,18 +54,17 @@ export class SongTableDataSource extends DataSource<Song> {
 
     this.songsloadingSubject.next(true);
 
-    this.topSongsSubs=this._http.getTop10Songs().pipe(
+    this.topSongsSubs = this._http.getTop10Songs().pipe(
       catchError(() => of([])),
       finalize(() => this.songsloadingSubject.next(false))
     )
       .subscribe(songs => this.songsSubject.next(songs));
   }
 
-  loadPlaylistSongs(playlist_id: string, filter = '',
-    sortDirection = 'asc', pageIndex = 0, pageSize = 0) {
+  loadPlaylistSongs(playlist_id: string, filter = '', sortDirection = 'asc', pageIndex = 0, pageSize = 0) {
     this.songsloadingSubject.next(true);
 
-   this.loadPlaylistSongsSubs= this._http.loadPlaylistSongs(playlist_id, filter, sortDirection,
+    this.loadPlaylistSongsSubs = this._http.loadPlaylistSongs(playlist_id, filter, sortDirection,
       pageIndex, pageSize).pipe(
         catchError(() => of([])),
         finalize(() => this.songsloadingSubject.next(false))
