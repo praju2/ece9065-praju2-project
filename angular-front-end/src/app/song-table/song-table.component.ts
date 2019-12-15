@@ -30,7 +30,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(SongDetailComponent) songDetailComponentList: QueryList<SongDetailComponent>;
 
   dataSource: SongTableDataSource;
-  songDetails: Object=new Object();
+  songDetails: Object = new Object();
   subDelSong: Subscription;
   subSongDetails: Subscription;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -119,19 +119,26 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadSongDetails(row) {
- 
-    if (row) {    
+
+    if (row) {
       this.subSongDetails = this._http.getSongDetails(row).subscribe(
-        res => { this.songDetails = res;},
+        res => {
+          this.songDetails = res;
+          console.log(this.songDetails);
+          this._song.populateSongModel(this.songDetails);
+          this.songDetailComponentList.forEach(instance => {
+            instance.loadSongDetails();
+          });
+        },
         err => console.log('error', err.error)
       );
     }
 
-    this._song.populateSongModel(row);
-   
-    this.songDetailComponentList.forEach(instance => {
-      instance.loadSongDetails();
-    });
+    // this._song.populateSongModel(row);
+
+    // this.songDetailComponentList.forEach(instance => {
+    //   instance.loadSongDetails();
+    // });
   }
 
 }
