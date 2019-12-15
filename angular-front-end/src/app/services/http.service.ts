@@ -22,10 +22,23 @@ export class HttpService {
 
   }
 
-  insertSong(song) {
-     return this.http.post<Song[]>('http://localhost:8080/api/secure/song',song);
 
+  insertSong(song) {
+    return this.http.post<any>('http://localhost:8080/api/secure/song', song);
   }
+
+  deleteSong(song) {
+    console.log(song);
+   
+    return this.http.delete<any>(`http://localhost:8080/api/admin/song/${song._id}`);
+  }
+
+  updateSong(song) {    
+    return this.http.put<any>('http://localhost:8080/api/admin/song', song);
+  }
+
+
+
 
   findSongs(
     songId: number, filter = '', sortOrder = 'asc',

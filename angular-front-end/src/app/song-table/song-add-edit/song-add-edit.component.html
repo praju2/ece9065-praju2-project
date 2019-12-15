@@ -132,7 +132,8 @@
     </table>
 
     <p>
-        <button mat-raised-button type="submit"  color="primary" [disabled]="_song.form.invalid"> Submit</button>
+        <button *ngIf="_song.form.controls['$key'].value!='modify'" mat-raised-button type="submit"  color="primary" [disabled]="_song.form.invalid"> Submit</button>
+        <button *ngIf="_song.form.controls['$key'].value=='modify'" mat-raised-button type="submit"  color="primary" [disabled]="_song.form.invalid"> Update</button>
         <button mat-raised-button color="warn" type="reset"  (click)="onClear()">Clear</button>
     </p>
 </form>

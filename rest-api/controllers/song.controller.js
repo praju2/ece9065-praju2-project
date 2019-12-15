@@ -97,6 +97,7 @@ exports.song_create = function (req, res, next) {
             Hidden: req.body.Hidden
         }
     );
+  
     song.save(function (err, song) {
         if (err) {
             return next(err);
@@ -104,7 +105,7 @@ exports.song_create = function (req, res, next) {
         if (req.body.desc != undefined) {
             review_controller.addReview(req, res, next, song._id);
         }
-        res.send('Song Saved successfully');
+        res.status(200).send(song);
 
     }
     );
@@ -112,7 +113,7 @@ exports.song_create = function (req, res, next) {
 };
 
 exports.song_modify = function (req, res, next) {
-    Song.findById(req.body.song_id, function (err, song) {
+    Song.findById(req.body._id, function (err, song) {
         if (err) { return next(err); }
         if (req.body.Title != undefined) { song.Title = req.body.Title; }
         if (req.body.Artist != undefined) { song.Artist = req.body.Artist; }
@@ -126,7 +127,7 @@ exports.song_modify = function (req, res, next) {
             if (err) {
                 return next(err);
             }
-            res.send('Song Modified successfully');
+            res.status(200).send(song);
 
         }
         );
@@ -136,11 +137,12 @@ exports.song_modify = function (req, res, next) {
 };
 
 
-exports.delete_song = function (req, res, next) {
-    Song.findByIdAndDelete(req.body.song_id, function (err, song) {
+exports.delete_song = function (req, res, next) {  
+    Song.findByIdAndDelete(req.params.id, function (err, song) {
         if (err) return next(err);
-        review_controller.deleteReviews(req, res, next, song._id);
-        res.send('Song and its Review deleted successfully');
+        
+        review_controller.deleteReviews(req, res, next, req.params.id);
+        res.status(200).send({msg:'Song and its Review deleted successfully'});        
     });
 
 };

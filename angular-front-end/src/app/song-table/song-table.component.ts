@@ -1,7 +1,4 @@
 import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy, ElementRef, Input, HostListener } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SongTableDataSource } from './song-table-datasource';
 import { Song } from '../models/song.model';
@@ -9,10 +6,10 @@ import { HttpService } from '../services/http.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
 import { ReviewComponent } from './review/review.component';
-import { debounceTime, distinctUntilChanged, tap, timeInterval } from 'rxjs/operators';
 import { SongService } from '../services/song.service';
 import { AuthService } from '../services/auth.service';
 import { SongAddEditComponent } from './song-add-edit/song-add-edit.component';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-song-table',
@@ -27,17 +24,18 @@ import { SongAddEditComponent } from './song-add-edit/song-add-edit.component';
   ],
 })
 export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('input', { static: false }) input: ElementRef;
+
 
   dataSource: SongTableDataSource;
-  subscription: Subscription;
+  
+  subDelSong : Subscription;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   columnsToDisplay = ['Ranking', 'Title', 'Artist', ' '];
   expandedElement: Song | null;
 
 
 
-  constructor(private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService) {
+  constructor(private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService, private _notification: NotificationService) {
 
   }
 
@@ -50,20 +48,13 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // server-side search
-    fromEvent(this.input.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(150),
-        distinctUntilChanged(),
-        tap(() => {
-          this.findSongs(this.input.nativeElement.value);
-        })
-      )
-      .subscribe();
   }
   @HostListener('window:beforeunload')
   ngOnDestroy() {
 
+    if (this.subDelSong) {
+      this.subDelSong.unsubscribe();
+    }
     if (this.dataSource.findSongsSubs) {
       this.dataSource.findSongsSubs.unsubscribe();
     }
@@ -110,10 +101,26 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this._song.initializeFormGroup();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '60%';    
+    dialogConfig.width = '60%';
     this.dialog.open(SongAddEditComponent, dialogConfig);
   }
 
+  onEdit(row) {
+    this._song.populateForm(row);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    this.dialog.open(SongAddEditComponent, dialogConfig);
+  }
 
+  onDelete(row) {
+   this.subDelSong= this._http.deleteSong(row).subscribe(
+      res => console.log('hey', res),
+      err => console.log('error', err.error)
+    );;
+    this.findSongs('');
+    this._notification.warn('Deleted successfully!!');
+  }
 
 }

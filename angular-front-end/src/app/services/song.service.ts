@@ -64,6 +64,7 @@ export class SongService {
 
   form: FormGroup = new FormGroup({
     $key: new FormControl(null),
+    _id: new FormControl(null),
     title: this.titleFormControl,
     artist: this.artistFormControl,
     album: this.albumFormControl,
@@ -76,6 +77,7 @@ export class SongService {
   initializeFormGroup() {
     this.form.setValue({
       $key: null,
+      _id: '',
       title: '',
       artist: '',
       album: '',
@@ -86,5 +88,18 @@ export class SongService {
     });
   }
 
-  
+  populateForm(song) {
+    this.form.setValue({
+      $key: 'modify',
+      _id: song._id,
+      title: song.Title,
+      artist: song.Artist,
+      album: song.Album,
+      year: song.Year,
+      genre: song.Genre,
+      track: song.Track,
+      length: song.Length
+    });
+  }
+
 }

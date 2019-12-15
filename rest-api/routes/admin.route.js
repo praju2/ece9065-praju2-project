@@ -13,7 +13,7 @@ router.post('/user', user_controller.create_user);
 router.get('/song', song_controller.song_all);
 router.post('/song', song_controller.song_create);
 router.put('/song', song_controller.song_modify);
-router.delete('/song', song_controller.delete_song);
+router.delete('/song/:id', song_controller.delete_song);
 
 router.delete('/review', review_controller.delete_review); //delete review
 

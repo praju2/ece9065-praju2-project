@@ -1,34 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { SongService } from '../../services/song.service';
 import { HttpService } from '../../services/http.service';
 import { MatDialogRef } from '@angular/material';
 import { Song } from '../../models/song.model';
 import { NotificationService } from '../../services/notification.service';
+import { SongTableComponent } from '../song-table.component';
+import { ChildActivationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-song-add-edit',
   templateUrl: './song-add-edit.component.html',
   styleUrls: ['./song-add-edit.component.scss']
 })
-export class SongAddEditComponent implements OnInit {
+export class SongAddEditComponent implements OnInit,OnDestroy {
+ 
 
-  constructor(private _song: SongService,private _http: HttpService,private _notification:NotificationService,
+  subUpdSong :Subscription;
+  subInsSong :Subscription;
+
+  constructor(private _song: SongService, private _http: HttpService, private _notification: NotificationService,
     private dialogRef: MatDialogRef<SongAddEditComponent>) { }
+    songTableComponent: SongTableComponent;
 
   ngOnInit() {
+  }
+  ngOnDestroy(): void {
+   if(this.subInsSong)
+   {
+     this.subInsSong.unsubscribe();
+   }
+   if(this.subUpdSong)
+   {
+     this.subUpdSong.unsubscribe();
+   }
   }
 
   onClear() {
     this._song.form.reset();
-    this._song.initializeFormGroup();       
+    this._song.initializeFormGroup();
   }
 
   onSubmit() {
- 
+
     if (this._song.form.valid) {
-      const song:Song={Reviews: null,
+      const song: Song = {
+        Reviews: null,
         Hidden: false,
-        _id: null,
+        _id: this._song.form.value._id,
         Title: this._song.form.value.title,
         Artist: this._song.form.value.artist,
         Album: this._song.form.value.album,
@@ -36,18 +55,28 @@ export class SongAddEditComponent implements OnInit {
         Year: this._song.form.value.year,
         Length: this._song.form.value.length,
         Genre: this._song.form.value.genre,
-        Rating: null};  
-      //if (!this._song.form.get('$key').value)
-        this._http.insertSong(song);
-      //else
-        //this._song.updateEmployee(this._song.form.value);
+        Rating: null
+      };
+      if (this._song.form.get('$key').value!='modify') {
+        this.subInsSong=this._http.insertSong(song).subscribe(
+          res => console.log('hey', res),
+          err => console.log('error', err.error)
+        );
+      } else
+      {
+        this.subUpdSong= this._http.updateSong(song).subscribe(
+          res => console.log('hey', res),
+          err => console.log('error', err.error)
+        );
+      }  
       this._notification.success(':: Submitted successfully');
+      this.songTableComponent.findSongs('');
       this.onClose();
     }
   }
 
   onClose() {
-   this.onClear();
+    this.onClear();
     this.dialogRef.close();
   }
 
