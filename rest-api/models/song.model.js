@@ -5,7 +5,7 @@ let songSchema = new Schema({
     Title: { type: String, required: true, max: 300 },
     Artist: { type: String, required: true, max: 300 },
     Album: { type: String, required: true, max: 300 },
-    Track: { type: Number, required: true, max: 99 },
+    Track: { type: Number, required: true, max: 999 },
     Year: { type: Number, required: true, max: 2021 },
     Length: { type: Number, required: true, max: 2000 },
     Genre: { type: String, required: true, max: 300 },

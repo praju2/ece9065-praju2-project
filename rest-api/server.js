@@ -51,7 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-
+console.log("got the req1");
 
 app.use('/api/open', open);
 app.use('/api/admin',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('admin')], admin);

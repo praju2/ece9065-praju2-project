@@ -5,13 +5,14 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SongTableDataSource } from './song-table-datasource';
 import { Song } from '../models/song.model';
-import { OpenService } from '../services/open.service';
+import { HttpService } from '../services/http.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
 import { ReviewComponent } from './review/review.component';
 import { debounceTime, distinctUntilChanged, tap, timeInterval } from 'rxjs/operators';
 import { SongService } from '../services/song.service';
 import { AuthService } from '../services/auth.service';
+import { SongAddEditComponent } from './song-add-edit/song-add-edit.component';
 
 @Component({
   selector: 'app-song-table',
@@ -26,10 +27,7 @@ import { AuthService } from '../services/auth.service';
   ],
 })
 export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<Song>;
-  // @ViewChild('input',{static: false}) input: ElementRef;
+  @ViewChild('input', { static: false }) input: ElementRef;
 
   dataSource: SongTableDataSource;
   subscription: Subscription;
@@ -39,7 +37,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor(private _http: OpenService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService) {
+  constructor(private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService) {
 
   }
 
@@ -52,17 +50,16 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-
-    // // server-side search
-    // fromEvent(this.input.nativeElement,'keyup')
-    //     .pipe(
-    //         debounceTime(150),
-    //         distinctUntilChanged(),
-    //         tap(() => {
-    //             this.findSongs();
-    //         })
-    //     )
-    //     .subscribe();
+    // server-side search
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+          this.findSongs(this.input.nativeElement.value);
+        })
+      )
+      .subscribe();
   }
   @HostListener('window:beforeunload')
   ngOnDestroy() {
@@ -94,10 +91,6 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // applyFilter(filterValue: string) {
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
-
   openDialog(element) {
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.disableClose=true;
@@ -112,4 +105,15 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.columnsToDisplay = ['Title', 'Artist', ' '];
 
   }
+
+  onCreate() {
+    this._song.initializeFormGroup();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '60%';    
+    this.dialog.open(SongAddEditComponent, dialogConfig);
+  }
+
+
+
 }

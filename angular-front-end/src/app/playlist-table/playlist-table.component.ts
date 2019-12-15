@@ -5,7 +5,7 @@ import { MatTable } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { PlaylistTableDataSource } from './playlist-table-datasource';
 import { Playlist } from '../models/playlist.model';
-import { OpenService } from '../services/open.service';
+import { HttpService } from '../services/http.service';
 import { SongService } from '../services/song.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription, Subject, fromEvent } from 'rxjs';
@@ -39,7 +39,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   columnsToDisplay = ['playlist_title', 'playlist_desc'];
   expandedElement: Playlist | null;
 
-  constructor(private _http: OpenService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
+  constructor(private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
     this._song.module = 'playlist';
   }
 

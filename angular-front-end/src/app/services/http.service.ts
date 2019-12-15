@@ -10,7 +10,7 @@ import { Playlist } from '../models/Playlist.model';
 @Injectable({
   providedIn: 'root'
 })
-export class OpenService {
+export class HttpService {
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +22,10 @@ export class OpenService {
 
   }
 
+  insertSong(song) {
+     return this.http.post<Song[]>('http://localhost:8080/api/secure/song',song);
+
+  }
 
   findSongs(
     songId: number, filter = '', sortOrder = 'asc',

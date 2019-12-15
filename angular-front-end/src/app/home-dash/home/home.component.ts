@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  @ViewChild('input', { static: false }) input: ElementRef;
+
   @ViewChild(SongTableComponent, { static: false }) child: SongTableComponent;
 
   search: string;
@@ -20,16 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     
   }
   ngAfterViewInit() {
-    // server-side search
-    fromEvent(this.input.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(150),
-        distinctUntilChanged(),
-        tap(() => {
-          this.child.findSongs(this.input.nativeElement.value);
-        })
-      )
-      .subscribe();
+   
   }
 
 

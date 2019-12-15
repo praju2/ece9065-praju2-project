@@ -15,13 +15,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReviewComponent } from './song-table/review/review.component';
-import { OpenService } from './services/open.service';
+import { HttpService } from './services/http.service';
 import { SongService } from './services/song.service';
 import { RegisterComponent } from './login/register/register.component';
 import { LoginComponent } from './login/login.component';
 import { PlaylistTableComponent } from './playlist-table/playlist-table.component';
 import { AuthGuard } from './guard/auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar'
 
 // 1. Import the libs you need
 import { AngularFireModule } from '@angular/fire';
@@ -35,6 +36,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SongAddEditComponent } from './song-table/song-add-edit/song-add-edit.component';
+import { SnackbarComponent } from './snackbar/snackbar.component';
+
 
 // 2. Add your credentials from step 1
 const firebaseConfig = {
@@ -58,7 +61,8 @@ const firebaseConfig = {
     LoginComponent,  
     PlaylistTableComponent,
     HomeDashComponent,
-    SongAddEditComponent
+    SongAddEditComponent,
+    SnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -74,14 +78,15 @@ const firebaseConfig = {
     MatInputModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     // 3. Initialize
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, LayoutModule // auth
 
   ],
-  providers: [OpenService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
+  providers: [HttpService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewComponent]
+  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent]
 })
 export class AppModule { }

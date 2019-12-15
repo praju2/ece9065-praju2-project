@@ -32,7 +32,7 @@ exports.fuzzy_search = function (req, res, next) {
             }
             else {
                 Song.find({}).exec(function (err, item) {
-                    if (err) {return next(err);}
+                    if (err) { return next(err); }
                     else {
                         var options = {
                             shouldSort: true,
@@ -42,19 +42,19 @@ exports.fuzzy_search = function (req, res, next) {
                             maxPatternLength: 32,
                             minMatchCharLength: 3,
                             keys: [
-                              "Title",
-                              "Artist",
-                              "Album",
-                              "Genre",
-                              "Year",
-                              "Track"
+                                "Title",
+                                "Artist",
+                                "Album",
+                                "Genre",
+                                "Year",
+                                "Track"
                             ]
-                          };
-                          var fuse = new Fuse(item, options); // "list" is the item array
-                          item = fuse.search(req.params.search_key);
-                          res.send(item);
+                        };
+                        var fuse = new Fuse(item, options); // "list" is the item array
+                        item = fuse.search(req.params.search_key);
+                        res.send(item);
                     }
-                    
+
                 });
 
 

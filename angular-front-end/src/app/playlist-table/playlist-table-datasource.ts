@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { Observable, of as observableOf, merge, BehaviorSubject, of, Subscription } from 'rxjs';
 import { Playlist } from '../models/Playlist.model';
-import { OpenService } from '../services/open.service';
+import { HttpService } from '../services/http.service';
 
 
 /**
@@ -22,7 +22,7 @@ export class PlaylistTableDataSource extends DataSource<Playlist> {
 
 
 
-  constructor(private _http: OpenService) {
+  constructor(private _http: HttpService) {
     super();
   }
 
