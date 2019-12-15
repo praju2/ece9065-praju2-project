@@ -4,4 +4,5 @@ export interface Review {
     desc: string;
     rating: number;
     user_id: User;
+    song_id: string;
 }

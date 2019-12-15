@@ -19,6 +19,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this._http.getReviews(this.song._id).subscribe(data => {
       this.reviews = data;
+      console.log(data);
     });
   }
   ngOnDestroy() {

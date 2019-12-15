@@ -1,0 +1,42 @@
+
+  <div class="element-description">  
+  Album: {{songDetails.Album}}
+</div>
+<div class="element-description">
+  Track: {{songDetails.Track}}
+</div>
+<div class="element-description">
+  Genre: {{songDetails.Genre}}
+</div>
+<div class="element-description">
+  Year: {{songDetails.Year}}
+</div>
+<div class="element-description">
+  Rating: {{songDetails.Rating}}
+</div>
+<br> 
+<div class="element-description">
+  Review:
+</div> 
+  <button mat-raised-button type="button"  color="primary" (click)="addReviewDialog()"> Add Review</button>
+  <button mat-raised-button type="button"  *ngIf="songDetails.Reviews!=null" color="warn" (click)="openDialog()"> View All</button>
+
+
+
+
+<div>
+  <ng-container *ngFor="let review of songDetails.Reviews; ">
+    <div  (click)="openDialog(element)">
+      <div class="element-description"><b>userName:</b>{{review.user_id.username}}</div>
+      <div class="element-description" >
+        <b>Rating:</b>{{review.rating}}
+      </div>            
+      <div class="review-description">
+      {{review.desc}}
+      </div>  
+
+      
+    </div>
+  </ng-container>
+
+</div>

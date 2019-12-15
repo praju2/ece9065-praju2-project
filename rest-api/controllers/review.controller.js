@@ -9,12 +9,14 @@ exports.review_details = function (req, res, next) {
 };
 //to fix regarding output
 exports.create = function (req, res, next) {
+  
     addReview(req, res, next, req.body.song_id);
-    res.send('Review attached successfully');
+    res.status(200).send({msg:'Review attached successfully'});        
+
 };
 
 exports.all_reviews = function (req, res, next) {
-    Review.find({ song_id: req.params.song_id }).exec(function (err, item) {
+    Review.find({ song_id: req.params.song_id }).populate({  path: 'user_id' }).exec(function (err, item) {
         if (err) return next(err);
         res.send(item);
     });

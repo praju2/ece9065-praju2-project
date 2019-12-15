@@ -23,6 +23,7 @@ import { PlaylistTableComponent } from './playlist-table/playlist-table.componen
 import { AuthGuard } from './guard/auth.guard';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar'
+import {MatSelectModule} from '@angular/material/select';
 
 // 1. Import the libs you need
 import { AngularFireModule } from '@angular/fire';
@@ -37,6 +38,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SongAddEditComponent } from './song-table/song-add-edit/song-add-edit.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
+import { SongDetailComponent } from './song-table/song-detail/song-detail.component';
+import { AddReviewComponent } from './song-table/add-review/add-review.component';
 
 
 // 2. Add your credentials from step 1
@@ -62,7 +65,9 @@ const firebaseConfig = {
     PlaylistTableComponent,
     HomeDashComponent,
     SongAddEditComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    SongDetailComponent,
+    AddReviewComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +84,7 @@ const firebaseConfig = {
     MatDialogModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatSelectModule,
     // 3. Initialize
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule, // firestore
@@ -87,6 +93,6 @@ const firebaseConfig = {
   ],
   providers: [HttpService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent]
+  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent,AddReviewComponent]
 })
 export class AppModule { }

@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Song } from '../models/song.model';
+import { MatDialog } from '@angular/material';
+import { Observable } from 'rxjs';
+import { AddReviewComponent } from '../song-table/add-review/add-review.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SongService {
   module: string;
+  songDetails:Song;
 
   titleFormControl = new FormControl('', [
     Validators.required,
@@ -60,7 +65,14 @@ export class SongService {
     Validators.max(9999)
   ]);
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
+
+  addReviewDialog(dialogConfig): Observable<any> {
+
+    const dialogRef= this.dialog.open(AddReviewComponent, dialogConfig);
+
+    return dialogRef.afterClosed();
+  }  
 
   form: FormGroup = new FormGroup({
     $key: new FormControl(null),
@@ -100,6 +112,10 @@ export class SongService {
       track: song.Track,
       length: song.Length
     });
+  }
+
+  populateSongModel(song) {
+  this.songDetails=song;    
   }
 
 }

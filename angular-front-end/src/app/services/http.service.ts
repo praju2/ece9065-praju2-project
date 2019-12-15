@@ -19,7 +19,6 @@ export class HttpService {
   }
   getSongs() {
     return this.http.get<Song[]>('http://localhost:8080/api/open/song/top_n');
-
   }
 
 
@@ -27,13 +26,27 @@ export class HttpService {
     return this.http.post<any>('http://localhost:8080/api/secure/song', song);
   }
 
+
+ // addReview(review) {
+    //return this.http.post<any>('http://localhost:8080/api/secure/review', review);
+  //}
+
+    async addReview(review){
+    const data=await this.http.post<any>('http://localhost:8080/api/secure/review', review).toPromise();
+    return data;
+    
+  }
+
+
   deleteSong(song) {
-    console.log(song);
-   
     return this.http.delete<any>(`http://localhost:8080/api/admin/song/${song._id}`);
   }
 
-  updateSong(song) {    
+  getSongDetails(song) {
+    return this.http.get<Song>(`http://localhost:8080/api/open/song/${song._id}`);
+  }
+
+  updateSong(song) {
     return this.http.put<any>('http://localhost:8080/api/admin/song', song);
   }
 

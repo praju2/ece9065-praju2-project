@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy, ElementRef, Input, HostListener } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy, ElementRef, Input, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SongTableDataSource } from './song-table-datasource';
 import { Song } from '../models/song.model';
@@ -10,6 +10,7 @@ import { SongService } from '../services/song.service';
 import { AuthService } from '../services/auth.service';
 import { SongAddEditComponent } from './song-add-edit/song-add-edit.component';
 import { NotificationService } from '../services/notification.service';
+import { SongDetailComponent } from './song-detail/song-detail.component';
 
 @Component({
   selector: 'app-song-table',
@@ -25,10 +26,13 @@ import { NotificationService } from '../services/notification.service';
 })
 export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  @ViewChild(SongDetailComponent, { static: false }) songDetailComponent: SongDetailComponent;
+  @ViewChildren(SongDetailComponent) songDetailComponentList: QueryList<SongDetailComponent>;
 
   dataSource: SongTableDataSource;
-  
-  subDelSong : Subscription;
+  songDetails: Object=new Object();
+  subDelSong: Subscription;
+  subSongDetails: Subscription;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   columnsToDisplay = ['Ranking', 'Title', 'Artist', ' '];
   expandedElement: Song | null;
@@ -48,12 +52,16 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+
   }
   @HostListener('window:beforeunload')
   ngOnDestroy() {
 
     if (this.subDelSong) {
       this.subDelSong.unsubscribe();
+    }
+    if (this.subSongDetails) {
+      this.subSongDetails.unsubscribe();
     }
     if (this.dataSource.findSongsSubs) {
       this.dataSource.findSongsSubs.unsubscribe();
@@ -82,14 +90,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  openDialog(element) {
-    const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose=true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '60%';
-    dialogConfig.data = element;
-    this.dialog.open(ReviewComponent, dialogConfig);
-  }
+
 
   loadPlaylistSongs(element = '') {
     this.dataSource.loadPlaylistSongs(element);
@@ -97,13 +98,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  onCreate() {
-    this._song.initializeFormGroup();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '60%';
-    this.dialog.open(SongAddEditComponent, dialogConfig);
-  }
+
 
   onEdit(row) {
     this._song.populateForm(row);
@@ -115,12 +110,28 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete(row) {
-   this.subDelSong= this._http.deleteSong(row).subscribe(
+    this.subDelSong = this._http.deleteSong(row).subscribe(
       res => console.log('hey', res),
       err => console.log('error', err.error)
-    );;
+    );
     this.findSongs('');
     this._notification.warn('Deleted successfully!!');
+  }
+
+  loadSongDetails(row) {
+ 
+    if (row) {    
+      this.subSongDetails = this._http.getSongDetails(row).subscribe(
+        res => { this.songDetails = res;},
+        err => console.log('error', err.error)
+      );
+    }
+
+    this._song.populateSongModel(row);
+   
+    this.songDetailComponentList.forEach(instance => {
+      instance.loadSongDetails();
+    });
   }
 
 }
