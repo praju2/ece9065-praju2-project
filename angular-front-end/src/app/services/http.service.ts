@@ -26,6 +26,16 @@ export class HttpService {
     return this.http.post<any>('http://localhost:8080/api/secure/song', song);
   }
 
+  insertPlaylist(playlist) {
+    return this.http.post<any>('http://localhost:8080/api/secure/playlist', playlist);
+  }
+
+  updatePlaylist(playlist) {
+    return this.http.put<any>('http://localhost:8080/api/secure/playlist', playlist);
+  }
+
+
+
 
  addReview1(review) {
     return this.http.post<any>('http://localhost:8080/api/secure/review', review);

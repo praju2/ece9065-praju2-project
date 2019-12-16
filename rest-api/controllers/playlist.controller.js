@@ -79,7 +79,7 @@ exports.create_playlist = function (req, res, next) {
             playlist_title: req.body.playlist_title,
             playlist_desc: req.body.playlist_desc,
             user_id: req.body.user_id,
-            songs: [req.body.song_id],
+            songs: [req.body.song_id==undefined?null:req.body.song_id],
             visiblity: req.body.visiblity
         }
     );
@@ -88,13 +88,14 @@ exports.create_playlist = function (req, res, next) {
         if (err) {
             return next(err);
         } else {
-            res.send('Playlist attached successfully');
+            res.status(200).send(playlist);
         }
     });
 };
 
 exports.modify_playlist = function (req, res, next) {
-    Playlist.findById(req.body.playlist_id, function (err, playlist) {
+    console.log("reached");
+    Playlist.findById(req.body._id, function (err, playlist) {
         if (err) {
             return next(err);
         } else {
@@ -111,12 +112,12 @@ exports.modify_playlist = function (req, res, next) {
                     if (err) {
                         return next(err);
                     } else {
-                        res.send('Playlist modified successfully');
+                        res.status(200).send(playlist);
                     }
                 });
             }
             else {
-                res.send('Playlist not found');
+                res.status(400).send({msg:'Playlist not found'});
             }
         }
     });

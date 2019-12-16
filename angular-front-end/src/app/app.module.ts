@@ -40,6 +40,8 @@ import { SongAddEditComponent } from './song-table/song-add-edit/song-add-edit.c
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { SongDetailComponent } from './song-table/song-detail/song-detail.component';
 import { AddReviewComponent } from './song-table/add-review/add-review.component';
+import {MatDividerModule} from '@angular/material/divider';
+import { PlaylistAddEditComponent } from './playlist-table/playlist-add-edit/playlist-add-edit.component';
 
 
 // 2. Add your credentials from step 1
@@ -67,7 +69,8 @@ const firebaseConfig = {
     SongAddEditComponent,
     SnackbarComponent,
     SongDetailComponent,
-    AddReviewComponent
+    AddReviewComponent,
+    PlaylistAddEditComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +88,7 @@ const firebaseConfig = {
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatDividerModule,
     // 3. Initialize
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule, // firestore
@@ -93,6 +97,6 @@ const firebaseConfig = {
   ],
   providers: [HttpService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent,AddReviewComponent]
+  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent,AddReviewComponent,PlaylistAddEditComponent]
 })
 export class AppModule { }

@@ -13,6 +13,8 @@ import { ReviewComponent } from '../song-table/review/review.component';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { SongTableComponent } from '../song-table/song-table.component';
 import { AuthService } from '../services/auth.service';
+import { PlaylistService } from '../services/playlist.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-playlist-table',
@@ -37,7 +39,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   columnsToDisplay = ['playlist_title', 'playlist_desc',' '];
   expandedElement: Playlist | null;
 
-  constructor(private _auth: AuthService,private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
+  constructor(private _notification: NotificationService,private _auth: AuthService,private _playlist: PlaylistService,private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
     this._song.module = 'playlist';
   }
 
@@ -74,6 +76,20 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     }
 
   }
+
+  
+  onCreate() {
+    this._playlist.initializeFormGroup();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '60%';
+    this._playlist.playlistDialog(dialogConfig).subscribe(data => {
+      for(let i=0;i<=3;i++){
+      this.searchPlaylist();      
+      }
+      });
+  }
+
 
   loadPlaylistSongs(expandedElement) {
     if (expandedElement) {
@@ -113,4 +129,24 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     dialogConfig.data = element;
     this.dialog.open(ReviewComponent, dialogConfig);
   }
+
+  
+  onEdit(row) {
+    this._playlist.populateForm(row);
+    if(row.user_id!=this._auth.getUserDetails('user_id'))
+    {
+      this._notification.warn(':: Do not have permission to modify playlist created by other users');
+    }else{
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+     this._playlist.playlistDialog(dialogConfig).subscribe(data => {
+      for(let i=0;i<=3;i++){
+        this.searchPlaylist();      
+        }          
+      });
+    }
+  }
+
 }
