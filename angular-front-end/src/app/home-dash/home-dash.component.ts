@@ -20,7 +20,7 @@ export class HomeDashComponent {
       }
 
       return [
-        { title: 'About', cols: 2, rows: .5 },
+        { title: 'About', cols: 2, rows: 1 },
         { title: 'Songs', cols: 2, rows: 3 },
       ];
     })

@@ -115,7 +115,7 @@ exports.authenticate_user = function (req, res, next) {
                             name: user.username,
                             email: user.email,
                             role: user.role,
-                            active: user.active
+                            active: user.isVerified
                         };
                         jwt.sign(payload, secret, { expiresIn: 36000 },
                             (err, token) => {
@@ -126,7 +126,8 @@ exports.authenticate_user = function (req, res, next) {
                                     });
                                 res.json({
                                     success: true,
-                                    token: `Bearer ${token}`
+                                    token: `Bearer ${token}`,
+                                    user : {user_id:user._id,username:user.username,email:user.email,role:user.role,isVerified:user.isVerified}                                 
                                 });
                             });
                             res.status(200).send({token});

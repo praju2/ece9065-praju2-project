@@ -78,9 +78,17 @@ export class HttpService {
     );
   }
 
-  findUserPlaylists(songId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
+  findUserPlaylists(playlistId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
+    return this.http.get(`http://localhost:8080/api/secure/playlist/user/${filter}`, {
+    }).pipe(map(res => {
+      res['payload'] = res;
+      return res['payload'];
+    })
+    );
+  }
 
-    return this.http.get(`http://localhost:8080/api/secure/playlist/user/5de2ccd21c9d440000dd95b2`, {
+  searchPlaylists(playlistId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
+    return this.http.get(`http://localhost:8080/api/secure/playlist/search/${filter}`, {
     }).pipe(map(res => {
       res['payload'] = res;
       return res['payload'];

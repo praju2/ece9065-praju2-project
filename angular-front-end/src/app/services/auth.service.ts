@@ -18,6 +18,8 @@ import { switchMap } from 'rxjs/operators';
 })
 export class AuthService {
 
+  user: User;
+
   user$: Observable<User>;
 
 
@@ -50,6 +52,12 @@ export class AuthService {
 
   logoutUser() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+    localStorage.removeItem('isVerified');
+
     this._router.navigate(['\login']);
   }
 
@@ -59,6 +67,27 @@ export class AuthService {
 
   loggedIn() {
     return !!localStorage.getItem('token');
+  }
+
+  getUserDetails(detail) {
+    if (this.loggedIn()) {
+      if (detail === 'user_id') {
+        return localStorage.getItem('user_id');
+      }
+      else if (detail === 'email') {
+        return localStorage.getItem('email');
+      }
+      else if (detail === 'username') {
+        return localStorage.getItem('username');
+      }
+      else if (detail === 'role') {
+        return localStorage.getItem('role');
+      }
+      else if (detail === 'isVerified') {
+        return localStorage.getItem('isVerified');
+      }
+    }
+
   }
 
   async googleSignin() {
@@ -74,7 +103,9 @@ export class AuthService {
     const data = {
       email: user.email,
       username: user.displayName,
-      password: ''
+      role: '',
+      user_id: '',
+      isVerified: true
     };
 
     return userRef.set(data, { merge: true });

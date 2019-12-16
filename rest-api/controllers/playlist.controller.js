@@ -1,11 +1,56 @@
 const Playlist = require('../models/playlist.model');
 const songs = require('../models/song.model');
+const Fuse = require('fuse.js');
 
 exports.playlist = function (req, res, next) {
     Playlist.find({}).select('-songs').exec(function (err, playlist) {
         if (err) return next(err);
         res.send(playlist);
     });
+};
+
+//https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+//https://fusejs.io/
+exports.fuzzy_search = function (req, res, next) {   
+    Playlist.find(
+        { $text: { $search: req.params.search_key } },
+        { score: { $meta: "textScore" } }
+    )   
+        .sort({ score: { $meta: 'textScore' } })
+        .select('-songs')
+        .exec(function (err, item) {
+            if (err) return next(err);
+            if (item.length != 0) {
+                res.send(item);
+            }
+            else {
+                Playlist.find({}).exec(function (err, item) {
+                    if (err) { return next(err); }
+                    else {
+                        var options = {
+                            shouldSort: true,
+                            threshold: 0.4,
+                            location: 0,
+                            distance: 100,
+                            maxPatternLength: 32,
+                            minMatchCharLength: 3,
+                            keys: [
+                                "playlist_title",
+                                "playlist_desc"
+                            ]
+                        };
+                        var fuse = new Fuse(item, options); // "list" is the item array
+                        item = fuse.search(req.params.search_key);
+                        res.send(item);
+                    }
+
+                });
+
+
+            }
+
+        });
+
 };
 
 exports.user_playlist = function (req, res, next) {

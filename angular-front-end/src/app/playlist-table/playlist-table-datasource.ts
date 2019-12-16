@@ -17,6 +17,7 @@ export class PlaylistTableDataSource extends DataSource<Playlist> {
   private PlaylistsSubject = new BehaviorSubject<Playlist[]>([]);
   private PlaylistsloadingSubject = new BehaviorSubject<boolean>(false);
   findUserPlaylistsSubs: Subscription;
+  searchPlaylistsSubs: Subscription;
   public Playlists$ = this.PlaylistsSubject.asObservable();
 
 
@@ -38,8 +39,19 @@ export class PlaylistTableDataSource extends DataSource<Playlist> {
 
   findUserPlaylists(PlaylistId: number, filter = '', sortDirection = 'asc', pageIndex = 0, pageSize = 3) {
     this.PlaylistsloadingSubject.next(true);
-
+    
     this.findUserPlaylistsSubs = this._http.findUserPlaylists(PlaylistId, filter, sortDirection,
+      pageIndex, pageSize).pipe(
+        catchError(() => of([])),
+        finalize(() => this.PlaylistsloadingSubject.next(false))
+      )
+      .subscribe(Playlists => this.PlaylistsSubject.next(Playlists));
+  }
+
+  searchPlaylists(PlaylistId: number, filter = '', sortDirection = 'asc', pageIndex = 0, pageSize = 3) {
+    this.PlaylistsloadingSubject.next(true);
+    
+    this.searchPlaylistsSubs = this._http.searchPlaylists(PlaylistId, filter, sortDirection,
       pageIndex, pageSize).pipe(
         catchError(() => of([])),
         finalize(() => this.PlaylistsloadingSubject.next(false))

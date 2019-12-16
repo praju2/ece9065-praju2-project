@@ -8,6 +8,7 @@ import { SongTableComponent } from '../song-table.component';
 import { ChildActivationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-song-add-edit',
@@ -21,7 +22,7 @@ export class SongAddEditComponent implements OnInit, OnDestroy {
   subInsSong: Subscription;
   subSongDetails : Subscription;
   selected:number=5;
-  constructor(private _song: SongService, private _http: HttpService, private _notification: NotificationService,
+  constructor(private _auth: AuthService,private _song: SongService, private _http: HttpService, private _notification: NotificationService,
     private dialogRef: MatDialogRef<SongAddEditComponent>) { }
   songTableComponent: SongTableComponent;
 
@@ -64,7 +65,7 @@ export class SongAddEditComponent implements OnInit, OnDestroy {
         this.subInsSong = this._http.insertSong(song).subscribe(
           res => {console.log('hey', res);
           console.log(this.selected);
-            this.subSongDetails = this._http.addReview1({ desc: this._song.form.value.review, rating:  this.selected, user_id: '5de2ccd21c9d440000dd95b2', song_id: res._id }).subscribe(
+            this.subSongDetails = this._http.addReview1({ desc: this._song.form.value.review, rating:  this.selected, user_id: this._auth.getUserDetails('user_id'), song_id: res._id }).subscribe(
             res => {
               this._notification.success(':: Submitted successfully');              
             },

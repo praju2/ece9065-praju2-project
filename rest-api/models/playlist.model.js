@@ -9,7 +9,7 @@ let playlistSchema = new Schema({
     songs: [{ type: Schema.Types.ObjectId, ref: 'Song' }],
     visiblity: { type: String, required: true, max: 300, default: 'private' },
 }, { collection: 'playlist' });
-
+playlistSchema.index({ playlist_title: 'text', playlist_desc: 'text' }, {name: 'Playlist Index', weights: {playlist_title: 10, playlist_desc: 4}});
 
 // Export the model
 module.exports = mongoose.model('Playlist', playlistSchema);

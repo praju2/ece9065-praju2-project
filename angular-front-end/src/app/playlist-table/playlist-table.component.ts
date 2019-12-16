@@ -12,6 +12,7 @@ import { Subscription, Subject, fromEvent } from 'rxjs';
 import { ReviewComponent } from '../song-table/review/review.component';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { SongTableComponent } from '../song-table/song-table.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-playlist-table',
@@ -27,26 +28,23 @@ import { SongTableComponent } from '../song-table/song-table.component';
 })
 export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy {
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<Playlist>;
   @ViewChild('input', { static: false }) input: ElementRef;
   @ViewChildren(SongTableComponent) SongTableComponentList: QueryList<SongTableComponent>;
   dataSource: PlaylistTableDataSource;
 
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['playlist_title', 'playlist_desc'];
+  columnsToDisplay = ['playlist_title', 'playlist_desc',' '];
   expandedElement: Playlist | null;
 
-  constructor(private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
+  constructor(private _auth: AuthService,private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
     this._song.module = 'playlist';
   }
 
 
   ngOnInit() {
     this.dataSource = new PlaylistTableDataSource(this._http);
-    this.dataSource.findUserPlaylists(1, '', '', 0, 0);
+    this.dataSource.findUserPlaylists(1, this._auth.getUserDetails('user_id'), '', 0, 0);//replace
 
   }
 
@@ -57,7 +55,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
-          this.findSongs();
+          this.searchPlaylist();
         })
       )
       .subscribe();
@@ -70,6 +68,11 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
       this.dataSource.findUserPlaylistsSubs.unsubscribe();
 
     }
+    if (this.dataSource.searchPlaylistsSubs) {
+      this.dataSource.searchPlaylistsSubs.unsubscribe();
+
+    }
+
   }
 
   loadPlaylistSongs(expandedElement) {
@@ -80,9 +83,9 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     }
   }
 
-  findSongs() {
+  searchPlaylist() {
     if (this.input.nativeElement.value !== '') {
-      this.dataSource.findUserPlaylists(
+      this.dataSource.searchPlaylists(
         1,
         this.input.nativeElement.value,
         '',
@@ -91,7 +94,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     } else {
       this.dataSource.findUserPlaylists(
         1,
-        this.input.nativeElement.value,
+        this._auth.getUserDetails('user_id'),
         '',
         0,
         0);

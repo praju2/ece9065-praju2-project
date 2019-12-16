@@ -8,6 +8,7 @@ import { HttpService } from '../../services/http.service';
 //import { SongService } from '../../services/song.service';
 import { NotificationService } from '../../services/notification.service';
 import { Subscription, Subject } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 //import { SongDetailComponent } from '../song-detail/song-detail.component';
 
 
@@ -41,7 +42,7 @@ export class AddReviewComponent implements OnInit, OnDestroy {
     Validators.pattern(/^[ '.()\p{L}\p{N}]+$/u)
 
   ]);
-  constructor(@Inject(MAT_DIALOG_DATA) data: Song, private dialogRef: MatDialogRef<AddReviewComponent>, private _http: HttpService, private _notification: NotificationService) {
+  constructor(@Inject(MAT_DIALOG_DATA) data: Song,private _auth: AuthService, private dialogRef: MatDialogRef<AddReviewComponent>, private _http: HttpService, private _notification: NotificationService) {
     this.song = data;
 
   }
@@ -57,7 +58,7 @@ export class AddReviewComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    this.subSongDetails = this._http.addReview1({ desc: this.review.nativeElement.value, rating: this.selected, user_id: '5de2ccd21c9d440000dd95b2', song_id: this.song._id }).subscribe(
+    this.subSongDetails = this._http.addReview1({ desc: this.review.nativeElement.value, rating: this.selected, user_id: this._auth.getUserDetails('user_id'), song_id: this.song._id }).subscribe(
       res => {
         this._notification.success(':: Submitted successfully');
         this.subSongDetails = this._http.getSongDetails(this.song).subscribe(
