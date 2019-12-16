@@ -131,11 +131,43 @@
         </tr>
     </table>
 
+    <ng-container *ngIf="_song.form.controls['$key'].value!='modify'">
+    <mat-form-field class="song-full-width">
+        <mat-select #rating placeholder="Rating" [(value)]="selected" formControlName="rating">
+            <mat-option value="1">1</mat-option>
+            <mat-option value="2">2</mat-option>
+            <mat-option value="3">3</mat-option>
+            <mat-option value="4">4</mat-option>
+            <mat-option value="5">5</mat-option>
+        </mat-select>
+        <!-- <mat-error *ngIf="_song.form.controls['rating'].hasError('required')">
+            Rating is <strong>required</strong>
+        </mat-error> -->
+    
+    </mat-form-field>
+    <mat-form-field class="review-full-width">
+        <textarea matInput #review maxlength="300" placeholder="Leave a Review"
+        formControlName="review"></textarea>
+        <mat-hint align="end">{{review.value.length}} / 300</mat-hint>
+        <mat-error *ngIf="_song.form.controls['review'].hasError('pattern')">
+            Invalid Character
+        </mat-error>
+        <mat-error
+            *ngIf="_song.form.controls['review'].hasError('minlength') && !_song.form.controls['review'].hasError('pattern')">
+            Minimum Length of Review is 3
+        </mat-error>
+        <mat-error *ngIf="_song.form.controls['review'].hasError('required')">
+            Review is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>   
+    </ng-container> 
+
     <p>
         <button *ngIf="_song.form.controls['$key'].value!='modify'" mat-raised-button type="submit"  color="primary" [disabled]="_song.form.invalid"> Submit</button>
         <button *ngIf="_song.form.controls['$key'].value=='modify'" mat-raised-button type="submit"  color="primary" [disabled]="_song.form.invalid"> Update</button>
         <button mat-raised-button color="warn" type="reset"  (click)="onClear()">Clear</button>
     </p>
+
 </form>
 
 

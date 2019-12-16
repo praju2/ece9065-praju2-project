@@ -1,6 +1,7 @@
 const Review = require('../models/review.model');
 const Song = require('../models/song.model');
 
+
 exports.review_details = function (req, res, next) {
     Song.find(req.params.id, function (err, item) {
         if (err) return next(err);
@@ -11,7 +12,11 @@ exports.review_details = function (req, res, next) {
 exports.create = function (req, res, next) {
   
     addReview(req, res, next, req.body.song_id);
-    res.status(200).send({msg:'Review attached successfully'});        
+    Song.findById(req.body.song_id).populate({ path: 'Reviews', options: { sort: { _id: -1 }, limit: 2 }, populate: { path: 'user_id' } }).exec(function (err, item) {
+        if (err) return next(err);
+        res.status(200).send(item);    
+    });
+       
 
 };
 

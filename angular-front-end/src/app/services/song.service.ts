@@ -10,7 +10,7 @@ import { AddReviewComponent } from '../song-table/add-review/add-review.componen
 })
 export class SongService {
   module: string;
-  songDetails:Song;
+  songDetails: Song;
 
   titleFormControl = new FormControl('', [
     Validators.required,
@@ -65,14 +65,20 @@ export class SongService {
     Validators.max(9999)
   ]);
 
+
+  reviewFormControl = new FormControl('', [
+    Validators.minLength(3),
+    Validators.pattern(/^[ '.()\p{L}\p{N}]+$/u)
+  ]);
+
   constructor(public dialog: MatDialog) { }
 
   addReviewDialog(dialogConfig): Observable<any> {
 
-    const dialogRef= this.dialog.open(AddReviewComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddReviewComponent, dialogConfig);
 
     return dialogRef.afterClosed();
-  }  
+  }
 
   form: FormGroup = new FormGroup({
     $key: new FormControl(null),
@@ -83,7 +89,9 @@ export class SongService {
     year: this.yearFormControl,
     genre: this.genreFormControl,
     track: this.trackFormControl,
-    length: this.lengthFormControl
+    length: this.lengthFormControl,
+    rating: new FormControl(null),
+    review: this.reviewFormControl
   });
 
   initializeFormGroup() {
@@ -96,7 +104,9 @@ export class SongService {
       year: '',
       genre: '',
       track: '',
-      length: ''
+      length: '',
+      rating: '',
+      review: ''
     });
   }
 
@@ -110,12 +120,14 @@ export class SongService {
       year: song.Year,
       genre: song.Genre,
       track: song.Track,
-      length: song.Length
+      length: song.Length,    
+      rating : null,
+      review :null  
     });
   }
 
   populateSongModel(song) {
-  this.songDetails=song;    
+    this.songDetails = song;
   }
 
 }

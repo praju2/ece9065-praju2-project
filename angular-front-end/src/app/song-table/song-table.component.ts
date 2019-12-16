@@ -123,8 +123,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     if (row) {
       this.subSongDetails = this._http.getSongDetails(row).subscribe(
         res => {
-          this.songDetails = res;
-          console.log(this.songDetails);
+          this.songDetails = res;          
           this._song.populateSongModel(this.songDetails);
           this.songDetailComponentList.forEach(instance => {
             instance.loadSongDetails();
@@ -133,12 +132,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
         err => console.log('error', err.error)
       );
     }
-
-    // this._song.populateSongModel(row);
-
-    // this.songDetailComponentList.forEach(instance => {
-    //   instance.loadSongDetails();
-    // });
+  
   }
 
 }

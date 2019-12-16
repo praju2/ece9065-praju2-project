@@ -57,16 +57,17 @@ export class AddReviewComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    this._http.addReview({ desc: this.review.nativeElement.value, rating: this.selected, user_id: '5de2ccd21c9d440000dd95b2', song_id: this.song._id }).then(
-      data => {
+    this.subSongDetails = this._http.addReview1({ desc: this.review.nativeElement.value, rating: this.selected, user_id: '5de2ccd21c9d440000dd95b2', song_id: this.song._id }).subscribe(
+      res => {
         this._notification.success(':: Submitted successfully');
         this.subSongDetails = this._http.getSongDetails(this.song).subscribe(
           res => { this.songDetails = res; this.dialogRef.close(); },
           err => console.log('error', err.error)
         );
-       
-      }
+      },
+      err => console.log('error', err.error)
     );
+
   }
 
 }

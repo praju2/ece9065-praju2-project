@@ -1,24 +1,24 @@
 
   <div class="element-description">  
-  Album: {{songDetails.Album}}
+  <b>Album:</b> {{songDetails.Album}}
 </div>
 <div class="element-description">
-  Track: {{songDetails.Track}}
+  <b>Track:</b> {{songDetails.Track}}
 </div>
 <div class="element-description">
-  Genre: {{songDetails.Genre}}
+  <b>Genre:</b> {{songDetails.Genre}}
 </div>
 <div class="element-description">
-  Year: {{songDetails.Year}}
+  <b>Year:</b> {{songDetails.Year}}
 </div>
 <div class="element-description">
-  Rating: {{songDetails.Rating}}
+  <b>Rating:</b> {{songDetails.Rating}}
 </div>
 <br> 
 <div class="element-description">
-  Review:
+  <b>Review:</b>
 </div> 
-  <button mat-raised-button type="button"  color="primary" (click)="addReviewDialog()"> Add Review</button>
+  <button mat-raised-button type="button"  color="primary" (click)="addReviewDialog()"> Add</button>
   <button mat-raised-button type="button"  *ngIf="songDetails.Reviews!=null" color="warn" (click)="openDialog()"> View All</button>
 
 

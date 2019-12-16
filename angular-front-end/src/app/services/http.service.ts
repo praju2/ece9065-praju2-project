@@ -27,14 +27,8 @@ export class HttpService {
   }
 
 
- // addReview(review) {
-    //return this.http.post<any>('http://localhost:8080/api/secure/review', review);
-  //}
-
-    async addReview(review){
-    const data=await this.http.post<any>('http://localhost:8080/api/secure/review', review).toPromise();
-    return data;
-    
+ addReview1(review) {
+    return this.http.post<any>('http://localhost:8080/api/secure/review', review);
   }
 
 

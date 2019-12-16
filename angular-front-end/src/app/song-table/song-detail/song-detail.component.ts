@@ -47,7 +47,7 @@ text:string="";
         err => console.log('error', err.error)
       );    
     });
-   // this.dialog.open(AddReviewComponent, dialogConfig);
+
   }
 
 

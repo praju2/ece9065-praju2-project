@@ -7,33 +7,36 @@ import { NotificationService } from '../../services/notification.service';
 import { SongTableComponent } from '../song-table.component';
 import { ChildActivationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-song-add-edit',
   templateUrl: './song-add-edit.component.html',
   styleUrls: ['./song-add-edit.component.scss']
 })
-export class SongAddEditComponent implements OnInit,OnDestroy {
- 
+export class SongAddEditComponent implements OnInit, OnDestroy {
 
-  subUpdSong :Subscription;
-  subInsSong :Subscription;
 
+  subUpdSong: Subscription;
+  subInsSong: Subscription;
+  subSongDetails : Subscription;
+  selected:number=5;
   constructor(private _song: SongService, private _http: HttpService, private _notification: NotificationService,
     private dialogRef: MatDialogRef<SongAddEditComponent>) { }
-    songTableComponent: SongTableComponent;
+  songTableComponent: SongTableComponent;
 
   ngOnInit() {
   }
   ngOnDestroy(): void {
-   if(this.subInsSong)
-   {
-     this.subInsSong.unsubscribe();
-   }
-   if(this.subUpdSong)
-   {
-     this.subUpdSong.unsubscribe();
-   }
+    if (this.subInsSong) {
+      this.subInsSong.unsubscribe();
+    }
+    if (this.subUpdSong) {
+      this.subUpdSong.unsubscribe();
+    }
+    if (this.subSongDetails) {
+      this.subSongDetails.unsubscribe();
+    }    
   }
 
   onClear() {
@@ -57,18 +60,25 @@ export class SongAddEditComponent implements OnInit,OnDestroy {
         Genre: this._song.form.value.genre,
         Rating: null
       };
-      if (this._song.form.get('$key').value!='modify') {
-        this.subInsSong=this._http.insertSong(song).subscribe(
-          res => console.log('hey', res),
+      if (this._song.form.get('$key').value != 'modify') {
+        this.subInsSong = this._http.insertSong(song).subscribe(
+          res => {console.log('hey', res);
+          console.log(this.selected);
+            this.subSongDetails = this._http.addReview1({ desc: this._song.form.value.review, rating:  this.selected, user_id: '5de2ccd21c9d440000dd95b2', song_id: res._id }).subscribe(
+            res => {
+              this._notification.success(':: Submitted successfully');              
+            },
+            err => console.log('error', err.error)
+          );
+        },
           err => console.log('error', err.error)
         );
-      } else
-      {
-        this.subUpdSong= this._http.updateSong(song).subscribe(
-          res => console.log('hey', res),
+      } else {
+        this.subUpdSong = this._http.updateSong(song).subscribe(
+          res => {console.log('hey', res)},
           err => console.log('error', err.error)
         );
-      }  
+      }
       this._notification.success(':: Submitted successfully');
       this.songTableComponent.findSongs('');
       this.onClose();
@@ -79,5 +89,8 @@ export class SongAddEditComponent implements OnInit,OnDestroy {
     this.onClear();
     this.dialogRef.close();
   }
+  
 
 }
+
+
