@@ -156,9 +156,10 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this._notification.warn(':: Song removed from playlist successfully');
      // this.loadPlaylistSongs(null);
-      this.loadPlaylistSongs(this._playlist.playlist_id);  
- 
- 
+    for(let i=0;i<5;i++){
+     this.loadPlaylistSongs(this._playlist.playlist_id);  
+    }
+    
   
     }
   
