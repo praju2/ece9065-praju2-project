@@ -8,7 +8,7 @@ import { User } from '../models/user.model';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-
+import { environment } from '../../environments/environment';
 
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -21,10 +21,10 @@ export class AuthService {
   user: User;
 
   user$: Observable<User>;
+  baseUrl = environment.baseUrl;
 
-
-  private _registerUrl = 'http://localhost:8080/api/open/user/signup';
-  private _loginUrl = 'http://localhost:8080/api/open/user/authenticate';
+  private _registerUrl = this.baseUrl +'/api/open/user/signup';
+  private _loginUrl = this.baseUrl +'/api/open/user/authenticate';
 
   constructor(private http: HttpClient, private _router: Router, private afAuth: AngularFireAuth, private afs: AngularFirestore, private router: Router) {
     this.user$ = this.afAuth.authState.pipe(

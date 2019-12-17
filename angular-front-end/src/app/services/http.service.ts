@@ -5,6 +5,8 @@ import { Song } from '../models/song.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Playlist } from '../models/Playlist.model';
+import { environment } from '../../environments/environment';
+
 
 
 @Injectable({
@@ -12,8 +14,9 @@ import { Playlist } from '../models/Playlist.model';
 })
 export class HttpService {
 
-  openUrl='http://localhost:8080/api/open';
-  secureUrl='http://localhost:8080/api/secure';
+  baseUrl = environment.baseUrl;
+  openUrl=this.baseUrl +'/api/open';
+  secureUrl=this.baseUrl +'/api/secure';
   adminUrl='http://localhost:8080/api/admin'
 
 
