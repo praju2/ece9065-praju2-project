@@ -13,7 +13,8 @@ exports.playlist = function (req, res, next) {
 //https://fusejs.io/
 exports.fuzzy_search = function (req, res, next) {   
     Playlist.find(
-        { $text: { $search: req.params.search_key } },
+        { visiblity:{$ne:'private'},
+         $text: { $search: req.params.search_key } },
         { score: { $meta: "textScore" } }
     )   
         .sort({ score: { $meta: 'textScore' } })
@@ -24,7 +25,7 @@ exports.fuzzy_search = function (req, res, next) {
                 res.send(item);
             }
             else {
-                Playlist.find({}).exec(function (err, item) {
+                Playlist.find({visiblity:{$ne:'private'}}).exec(function (err, item) {
                     if (err) { return next(err); }
                     else {
                         var options = {
@@ -73,17 +74,19 @@ exports.details = function (req, res, next) {
 };
 
 exports.create_playlist = function (req, res, next) {
+    console.log(req.body);
 
     const playlist = new Playlist(
         {
             playlist_title: req.body.playlist_title,
             playlist_desc: req.body.playlist_desc,
             user_id: req.body.user_id,
-            songs: [req.body.song_id==undefined?null:req.body.song_id],
+            songs: [req.body.songs],
             visiblity: req.body.visiblity
         }
-    );
+    );  
 
+ 
     playlist.save(function (err, playlist) {
         if (err) {
             return next(err);

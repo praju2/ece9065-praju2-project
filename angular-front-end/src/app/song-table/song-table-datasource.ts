@@ -63,6 +63,7 @@ export class SongTableDataSource extends DataSource<Song> {
 
   loadPlaylistSongs(playlist_id: string, filter = '', sortDirection = 'asc', pageIndex = 0, pageSize = 0) {
     this.songsloadingSubject.next(true);
+    console.log("hey",playlist_id);
 
     this.loadPlaylistSongsSubs = this._http.loadPlaylistSongs(playlist_id, filter, sortDirection,
       pageIndex, pageSize).pipe(

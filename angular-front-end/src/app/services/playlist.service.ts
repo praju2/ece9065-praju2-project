@@ -9,6 +9,10 @@ import { MatDialog } from '@angular/material';
 })
 export class PlaylistService {
 
+  module:string='default';
+  sub_module:string='default';
+  song:any;
+  playlist_id:string;
   constructor(public dialog: MatDialog) { }
 
   titleFormControl = new FormControl('', [
@@ -36,6 +40,7 @@ export class PlaylistService {
     playlist_title: this.titleFormControl,
     playlist_desc: this.reviewFormControl,
     visiblity : this.visiblityFormControl,
+    song: new FormControl(null)
   });
 
   initializeFormGroup() {
@@ -44,7 +49,8 @@ export class PlaylistService {
       _id: '',
       playlist_title: '',
       playlist_desc: '',
-      visiblity: ''
+      visiblity: '',
+      song: ''
     });
   }
 
@@ -54,7 +60,8 @@ export class PlaylistService {
       _id: playlist._id,
       playlist_title: playlist.playlist_title,
       playlist_desc: playlist.playlist_desc,
-      visiblity: playlist.visiblity      
+      visiblity: playlist.visiblity,
+      song: null,      
     });
   }
 

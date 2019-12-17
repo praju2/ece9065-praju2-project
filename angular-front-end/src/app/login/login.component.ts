@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +11,8 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  userData: User = { user_id:'',username: '', email: '', role: '', isVerified:false };
-  constructor(private _auth: AuthService, private _router: Router) { }
+  userData: User = { user_id:'',username: '', email: '', role: '', isVerified:false,password:'' };
+  constructor(private _auth: AuthService, private _router: Router, private _notification : NotificationService) { }
 
   ngOnInit() {
   }
@@ -28,7 +29,11 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', res.token);          
           this._router.navigate(['/home']);
         },
-        err => console.log('error', err.error)
+        err => {console.log('error', err.error)
+        if(err.error){
+          this._notification.warn(err.error.msg);
+        }
+        }
       );
 
   }

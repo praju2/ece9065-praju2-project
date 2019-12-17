@@ -70,10 +70,9 @@ export class HttpService {
   }
 
   loadPlaylistSongs(playlist_id: string, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Song[]> {
-
     return this.http.get(`http://localhost:8080/api/secure/playlist/${playlist_id}`, {
     }).pipe(map(res => {
-      res['payload'] = res;
+      res['payload'] = res;      
       return res['payload'];
     })
     );

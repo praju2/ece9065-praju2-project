@@ -11,6 +11,10 @@ import { AuthService } from '../services/auth.service';
 import { SongAddEditComponent } from './song-add-edit/song-add-edit.component';
 import { NotificationService } from '../services/notification.service';
 import { SongDetailComponent } from './song-detail/song-detail.component';
+import { PlaylistService } from '../services/playlist.service';
+import { PlaylistAddEditComponent } from '../playlist-table/playlist-add-edit/playlist-add-edit.component';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-table',
@@ -39,7 +43,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor(private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService, private _notification: NotificationService) {
+  constructor(private _playlist: PlaylistService,private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService, private _notification: NotificationService) {
 
   }
 
@@ -109,6 +113,17 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(SongAddEditComponent, dialogConfig);
   }
 
+  
+  addPlaylist(row) {
+    this._playlist.initializeFormGroup();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    dialogConfig.data = {song: row, module: 'Create'};
+    this.dialog.open(PlaylistAddEditComponent, dialogConfig);
+  }
+
   onDelete(row) {
     this.subDelSong = this._http.deleteSong(row).subscribe(
       res => console.log('hey', res),
@@ -134,5 +149,18 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   
   }
+  removeSongFromPlaylist(row){    
+      this._http.updatePlaylist({_id:this._playlist.playlist_id, add_remove_mode:'remove', song_id: row._id}).subscribe(
+        res => { console.log('success', res); },
+        err => console.log('error', err.error)
+      );
+      this._notification.warn(':: Song removed from playlist successfully');
+     // this.loadPlaylistSongs(null);
+      this.loadPlaylistSongs(this._playlist.playlist_id);  
+ 
+ 
+  
+    }
+  
 
 }

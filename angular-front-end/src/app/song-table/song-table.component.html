@@ -24,11 +24,16 @@
               <mat-icon>delete_outline</mat-icon>
             </button>
           </ng-container>
-          <ng-container *ngIf="_auth.getUserDetails('role')==='user'">
-            <button mat-icon-button (click)="onEdit(row)">
+          <ng-container *ngIf="_auth.getUserDetails('role')==='user' && _playlist.module!='Create'  && _playlist.sub_module!='playlist'">
+            <button mat-icon-button (click)="addPlaylist(row)">
               <mat-icon>playlist_add</mat-icon>
             </button>
-          </ng-container>          
+          </ng-container> 
+          <ng-container *ngIf="_auth.getUserDetails('role')==='user' && _playlist.sub_module=='playlist' ">
+            <button mat-icon-button color="warn"  (click)="removeSongFromPlaylist(row)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </ng-container>             
         </mat-cell>
       </ng-container>
 

@@ -1,4 +1,5 @@
 <!--https://material.angular.io/components/table/examples-->
+<ng-container *ngIf="_playlist.module=='default'">
 <h1>Playlists</h1>
 <!-- <button  *ngIf="_auth.loggedIn()" mat-raised-button (click)="onCreate()">
   <mat-icon>add</mat-icon>Create
@@ -10,7 +11,7 @@
 <div class="spinner-container" *ngIf="dataSource.loading$ | async">
     <mat-spinner></mat-spinner>
 </div>
-
+</ng-container>
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
 
   <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; ">
@@ -18,9 +19,12 @@
     <ng-container *ngIf="column===' ' && _auth.loggedIn() && _auth.getUserDetails('role')==='user'">
       
       <mat-cell *matCellDef="let row">
-      
-        <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>edit</mat-icon></button>
-                 
+        <ng-container *ngIf="_playlist.module=='default'">
+          <button mat-icon-button color="primary" (click)="onEdit(row)"><mat-icon>edit</mat-icon></button>
+        </ng-container> 
+        <ng-container *ngIf="_playlist.module=='Create'">
+          <button mat-icon-button color="primary" (click)="addSongToPlaylist(row)"><mat-icon>add</mat-icon></button>
+        </ng-container>                    
       </mat-cell>
     
     </ng-container>  

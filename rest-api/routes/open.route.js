@@ -9,6 +9,7 @@ const review_controller = require('../controllers/review.controller');
 
 
 router.post('/user/authenticate', user_controller.authenticate_user);
+router.post('/user/authenticate/google', user_controller.authenticate_google_user);
 
 router.post('/user/signup', user_controller.create_user);
 router.get('/user/verify/:token', user_controller.verify_user);

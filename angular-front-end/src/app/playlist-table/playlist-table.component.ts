@@ -29,6 +29,7 @@ import { NotificationService } from '../services/notification.service';
   ]
 })
 export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy {
+  module:string;
 
   @ViewChild('input', { static: false }) input: ElementRef;
   @ViewChildren(SongTableComponent) SongTableComponentList: QueryList<SongTableComponent>;
@@ -41,6 +42,12 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
 
   constructor(private _notification: NotificationService,private _auth: AuthService,private _playlist: PlaylistService,private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
     this._song.module = 'playlist';
+    if(_playlist.module!='Create')
+    {
+      _playlist.sub_module='playlist';
+    }
+ 
+    console.log(_playlist.sub_module);
   }
 
 
@@ -52,6 +59,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
 
   ngAfterViewInit() {
     // server-side search
+    if( this._playlist.module=='default'){
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
@@ -61,10 +69,13 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
         })
       )
       .subscribe();
+    }
   }
 
   @HostListener('window:beforeunload')
   ngOnDestroy() {
+    this._playlist.sub_module='default';
+    this._playlist.playlist_id=null;
     this._song.module = null;
     if (this.dataSource.findUserPlaylistsSubs) {
       this.dataSource.findUserPlaylistsSubs.unsubscribe();
@@ -78,20 +89,21 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   
-  onCreate() {
-    this._playlist.initializeFormGroup();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '60%';
-    this._playlist.playlistDialog(dialogConfig).subscribe(data => {
-      for(let i=0;i<=3;i++){
-      this.searchPlaylist();      
-      }
-      });
-  }
+  // onCreate() {
+  //   this._playlist.initializeFormGroup();
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.autoFocus = true;
+  //   dialogConfig.width = '60%';
+  //   this._playlist.playlistDialog(dialogConfig).subscribe(data => {
+  //     for(let i=0;i<=3;i++){
+  //     this.searchPlaylist();      
+  //     }
+  //     });
+  // }
 
 
   loadPlaylistSongs(expandedElement) {
+    this._playlist.playlist_id=expandedElement._id;
     if (expandedElement) {
       this.SongTableComponentList.forEach(instance => {
         instance.loadPlaylistSongs(expandedElement._id);
@@ -115,6 +127,15 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
         0,
         0);
     }
+  }
+
+  reloadPlaylist() {
+      this.dataSource.findUserPlaylists(
+        1,
+        this._auth.getUserDetails('user_id'),
+        '',
+        0,
+        0);
   }
 
   // applyFilter(filterValue: string) {
@@ -141,12 +162,25 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
     //dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "60%";
+    dialogConfig.data = {module: 'Edit'};
      this._playlist.playlistDialog(dialogConfig).subscribe(data => {
       for(let i=0;i<=3;i++){
-        this.searchPlaylist();      
+        this.reloadPlaylist();      
         }          
       });
     }
+    
+  }
+
+  addSongToPlaylist(row){
+    this._http.updatePlaylist({_id:row._id, add_remove_mode:'add', song_id: this._playlist.song._id}).subscribe(
+      res => { console.log('success', res); },
+      err => console.log('error', err.error)
+    );
+
+    this._notification.success(':: Song Added to playlist successfully');
+
+
   }
 
 }

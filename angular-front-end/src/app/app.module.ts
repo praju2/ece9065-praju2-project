@@ -42,6 +42,7 @@ import { SongDetailComponent } from './song-table/song-detail/song-detail.compon
 import { AddReviewComponent } from './song-table/add-review/add-review.component';
 import {MatDividerModule} from '@angular/material/divider';
 import { PlaylistAddEditComponent } from './playlist-table/playlist-add-edit/playlist-add-edit.component';
+import {MatExpansionModule} from '@angular/material/expansion'
 
 
 // 2. Add your credentials from step 1
@@ -83,6 +84,7 @@ const firebaseConfig = {
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatExpansionModule,
     MatInputModule,
     MatDialogModule,
     MatProgressSpinnerModule,

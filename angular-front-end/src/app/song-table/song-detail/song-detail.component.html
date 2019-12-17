@@ -17,9 +17,11 @@
 <div class="element-description">
   <b>Review : </b>
 </div>
-<button mat-raised-button type="button" color="primary" (click)="addReviewDialog()"> Add</button>
+<ng-container *ngIf="_playlist.module!='Create'">
+<button mat-raised-button type="button" color="primary" (click)="addReviewDialog()"> Add</button>  </ng-container>
 <button mat-raised-button type="button" *ngIf="songDetails.Reviews!=null" color="warn" (click)="openDialog()"> View
   All</button>
+
 
 
 

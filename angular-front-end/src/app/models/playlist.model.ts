@@ -6,5 +6,5 @@ export interface Playlist {
     playlist_title: string;
     playlist_desc: string;
     user_id: string;
-    songs: Song[];
+    songs: string;
 }

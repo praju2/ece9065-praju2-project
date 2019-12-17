@@ -4,9 +4,11 @@ const Schema = mongoose.Schema;
 let userSchema = new Schema({
     username: { type: String, required: true, max: 300 },
     email : {type: String, required : true, max:300,unique:true},
-    password : {type: String, required : true, max:300},
+    password : {type: String,  max:300},
     role: { type: String, required: true, max: 300,default: 'user' },
+    active: { type: Boolean, default: true },
     isVerified: { type: Boolean, default: false },
+    third_party: { type: Boolean, default: false },
     passwordResetToken: String,
     passwordResetExpires: Date
 }, { collection: 'user_details' });

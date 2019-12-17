@@ -1,8 +1,8 @@
 
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Inject, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { PlaylistService } from 'src/app/services/playlist.service';
 import { HttpService } from '../../services/http.service';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Song } from '../../models/song.model';
 import { NotificationService } from '../../services/notification.service';
 import { ChildActivationEnd } from '@angular/router';
@@ -23,13 +23,26 @@ export class PlaylistAddEditComponent implements OnInit, OnDestroy {
   subInsSong: Subscription;
   subUpdSong: Subscription;
   subSongDetails: Subscription;
+  song: Song;
+  playlist_id: string;
+  action: string;
+  panelOpenState = true;
+  module = 'Create ';
 
   constructor(private _auth: AuthService, private _playlist: PlaylistService, private _http: HttpService, private _notification: NotificationService,
-    private dialogRef: MatDialogRef<PlaylistAddEditComponent>) { }
+    private dialogRef: MatDialogRef<PlaylistAddEditComponent>, @Inject(MAT_DIALOG_DATA) data: any) { 
+      this.song = data.song; 
+      this.module = data.module;
+      _playlist.module=data.module;    
+      _playlist.song=data.song;         
+      this.playlist_id=this._playlist.form.value._id    
+     }
 
   ngOnInit() {
   }
   ngOnDestroy(): void {
+    this._playlist.module='default';
+    this._playlist.song=null;
     if (this.subInsSong) {
       this.subInsSong.unsubscribe();
     }
@@ -43,8 +56,16 @@ export class PlaylistAddEditComponent implements OnInit, OnDestroy {
 
 
   onClear() {
+    if (this._playlist.form.get('$key').value == 'modify' && this._playlist.form.value._id != '') {
+      this.playlist_id = this._playlist.form.value._id;
+      this.action = 'modify';
+    }
+    else {
+      this.action = null;
+    }
     this._playlist.form.reset();
     this._playlist.initializeFormGroup();
+
   }
 
   onClose() {
@@ -61,15 +82,20 @@ export class PlaylistAddEditComponent implements OnInit, OnDestroy {
         playlist_title: this._playlist.form.value.playlist_title,
         playlist_desc: this._playlist.form.value.playlist_desc,
         user_id: this._auth.getUserDetails('user_id'),
-        songs: []
+        songs: this._playlist.form.value.song
       };
 
-      if (this._playlist.form.get('$key').value != 'modify') {
+      if (this._playlist.form.get('$key').value != 'modify' && this.action != 'modify') {
+        playlist.songs = this.song._id;
         this._http.insertPlaylist(playlist).subscribe(
           res => { console.log('success', res); },
           err => console.log('error', err.error)
-        );
+        );        
       } else {
+      
+        if (playlist._id != '') {
+          playlist._id = this.playlist_id;
+        }
         this._http.updatePlaylist(playlist).subscribe(
           res => { console.log('success', res); },
           err => console.log('error', err.error)
