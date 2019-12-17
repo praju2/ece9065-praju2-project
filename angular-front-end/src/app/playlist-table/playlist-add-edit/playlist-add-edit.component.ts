@@ -29,7 +29,7 @@ export class PlaylistAddEditComponent implements OnInit, OnDestroy {
   panelOpenState = true;
   module = 'Create ';
 
-  constructor(private _auth: AuthService, private _playlist: PlaylistService, private _http: HttpService, private _notification: NotificationService,
+  constructor(public _auth: AuthService, public _playlist: PlaylistService, public _http: HttpService, public _notification: NotificationService,
     private dialogRef: MatDialogRef<PlaylistAddEditComponent>, @Inject(MAT_DIALOG_DATA) data: any) { 
       this.song = data.song; 
       this.module = data.module;

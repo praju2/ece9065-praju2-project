@@ -8,6 +8,6 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'angular-front-end';
-  constructor(private _auth: AuthService) { }
+  constructor(public _auth: AuthService) { }
 
 }

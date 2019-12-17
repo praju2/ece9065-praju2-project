@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sub: Subscription;
   search: string;
-  constructor(private dialog: MatDialog, private _auth: AuthService, private _song: SongService) { }
+  constructor(private dialog: MatDialog, public _auth: AuthService, public _song: SongService) { }
 
   ngOnInit() {
 

@@ -43,7 +43,7 @@ export class SongTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor(private _playlist: PlaylistService,private _http: HttpService, private dialog: MatDialog, private _song: SongService, private _auth: AuthService, private _notification: NotificationService) {
+  constructor(public _playlist: PlaylistService,public _http: HttpService, private dialog: MatDialog, public _song: SongService, public _auth: AuthService, public _notification: NotificationService) {
 
   }
 

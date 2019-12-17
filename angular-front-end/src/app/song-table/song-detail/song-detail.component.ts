@@ -18,7 +18,7 @@ export class SongDetailComponent implements OnInit, AfterViewInit, OnDestroy {
  
 text:string="";
   songDetails: Song={Reviews:[],Hidden:false,_id:'',Title:'',Artist:'',Album:'',Track:0,Year:0,Length:0,Genre:'',Rating:0,reviewCount:0};
-  constructor(private _song: SongService,private _playlist: PlaylistService, private _auth: AuthService, private _http: HttpService, private dialog: MatDialog) { 
+  constructor(private _song: SongService,public _playlist: PlaylistService, private _auth: AuthService, private _http: HttpService, private dialog: MatDialog) { 
   if(_song.songDetails!=null)
     this.songDetails=_song.songDetails;
   }

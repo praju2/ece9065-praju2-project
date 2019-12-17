@@ -40,7 +40,7 @@ export class PlaylistTableComponent implements AfterViewInit, OnInit, OnDestroy 
   columnsToDisplay = ['playlist_title', 'playlist_desc',' '];
   expandedElement: Playlist | null;
 
-  constructor(private _notification: NotificationService,private _auth: AuthService,private _playlist: PlaylistService,private _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
+  constructor(public _notification: NotificationService,public _auth: AuthService,public _playlist: PlaylistService,public _http: HttpService, private dialog: MatDialog, private elementRef: ElementRef, private _song: SongService) {
     this._song.module = 'playlist';
     if(_playlist.module!='Create')
     {

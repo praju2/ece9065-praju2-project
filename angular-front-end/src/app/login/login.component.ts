@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit,OnDestroy {
  
   reVerify:boolean=false;
   userData: User = { user_id:'',username: '', email: '', role: '', isVerified:false,password:'' };
-  constructor(private _auth: AuthService, private _router: Router, private _notification : NotificationService, private dialog: MatDialog) { }
+  constructor(public _auth: AuthService, private _router: Router, private _notification : NotificationService, private dialog: MatDialog) { }
 
   
   userNameFormControl = new FormControl('', [

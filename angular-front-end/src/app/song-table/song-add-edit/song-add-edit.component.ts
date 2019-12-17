@@ -22,7 +22,7 @@ export class SongAddEditComponent implements OnInit, OnDestroy {
   subInsSong: Subscription;
   subSongDetails : Subscription;
   selected:number=5;
-  constructor(private _auth: AuthService,private _song: SongService, private _http: HttpService, private _notification: NotificationService,
+  constructor(public _auth: AuthService,public _song: SongService, public _http: HttpService, public _notification: NotificationService,
     private dialogRef: MatDialogRef<SongAddEditComponent>) { }
   songTableComponent: SongTableComponent;
 

@@ -31,7 +31,7 @@
 
 <div>
   <ng-container *ngFor="let review of songDetails.Reviews; ">
-    <div (click)="openDialog(element)">
+    <div (click)="openDialog()">
       <div class="element-description"><b>userName : </b>{{review.user_id.username}}</div>
       <div class="element-description">
         <b>Rating : </b>{{review.rating}}
