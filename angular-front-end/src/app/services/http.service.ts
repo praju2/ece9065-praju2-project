@@ -12,46 +12,51 @@ import { Playlist } from '../models/Playlist.model';
 })
 export class HttpService {
 
+  openUrl='http://localhost:8080/api/open';
+  secureUrl='http://localhost:8080/api/secure';
+  adminUrl='http://localhost:8080/api/admin'
+
+
   constructor(private http: HttpClient) { }
 
   getReviews(id: string) {
-    return this.http.get<Review[]>(`http://localhost:8080/api/open/review/${id}`);
+    return this.http.get<Review[]>(this.openUrl+ `/review/${id}`);
   }
   getSongs() {
-    return this.http.get<Song[]>('http://localhost:8080/api/open/song/top_n');
+    return this.http.get<Song[]>(this.openUrl+'/song/top_n');
   }
 
 
   insertSong(song) {
-    return this.http.post<any>('http://localhost:8080/api/secure/song', song);
+    return this.http.post<any>(this.secureUrl+'/song', song);
   }
 
   insertPlaylist(playlist) {
-    return this.http.post<any>('http://localhost:8080/api/secure/playlist', playlist);
+    return this.http.post<any>(this.secureUrl+'/playlist', playlist);
   }
 
   updatePlaylist(playlist) {
-    return this.http.put<any>('http://localhost:8080/api/secure/playlist', playlist);
+    return this.http.put<any>(this.secureUrl+'/playlist', playlist);
   }
 
 
 
 
  addReview1(review) {
-    return this.http.post<any>('http://localhost:8080/api/secure/review', review);
+    return this.http.post<any>(this.secureUrl+'/review', review);
   }
 
 
   deleteSong(song) {
-    return this.http.delete<any>(`http://localhost:8080/api/admin/song/${song._id}`);
+    return this.http.delete<any>(this.adminUrl+`/song/${song._id}`);
   }
 
   getSongDetails(song) {
-    return this.http.get<Song>(`http://localhost:8080/api/open/song/${song._id}`);
+    return this.http.get<Song>(this.openUrl+`/song/${song._id}`);
   }
 
   updateSong(song) {
-    return this.http.put<any>('http://localhost:8080/api/admin/song', song);
+    return this.http.put<any>(this.adminUrl+'/song', song);
   }
 
 
@@ -61,7 +66,7 @@ export class HttpService {
     songId: number, filter = '', sortOrder = 'asc',
     pageNumber = 0, pageSize = 0): Observable<Song[]> {
 
-    return this.http.get(`http://localhost:8080/api/open/song/search/${filter}`, {
+    return this.http.get(this.openUrl+`/song/search/${filter}`, {
     }).pipe(map(res => {
       res['payload'] = res;
       return res['payload'];
@@ -70,7 +75,7 @@ export class HttpService {
   }
 
   loadPlaylistSongs(playlist_id: string, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Song[]> {
-    return this.http.get(`http://localhost:8080/api/secure/playlist/${playlist_id}`, {
+    return this.http.get(this.secureUrl+`/playlist/${playlist_id}`, {
     }).pipe(map(res => {
       res['payload'] = res;      
       return res['payload'];
@@ -79,7 +84,7 @@ export class HttpService {
   }
   getTop10Songs(): Observable<Song[]> {
 
-    return this.http.get('http://localhost:8080/api/open/song/top_n', {
+    return this.http.get(this.openUrl+'/song/top_n', {
     }).pipe(map(res => {
       res['payload'] = res;
       return res['payload'];
@@ -88,7 +93,7 @@ export class HttpService {
   }
 
   findUserPlaylists(playlistId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
-    return this.http.get(`http://localhost:8080/api/secure/playlist/user/${filter}`, {
+    return this.http.get(this.secureUrl+`/playlist/user/${filter}`, {
     }).pipe(map(res => {
       res['payload'] = res;
       return res['payload'];
@@ -97,7 +102,7 @@ export class HttpService {
   }
 
   searchPlaylists(playlistId: number, filter = '', sortOrder = 'asc', pageNumber = 0, pageSize = 0): Observable<Playlist[]> {
-    return this.http.get(`http://localhost:8080/api/secure/playlist/search/${filter}`, {
+    return this.http.get(this.secureUrl+`/playlist/search/${filter}`, {
     }).pipe(map(res => {
       res['payload'] = res;
       return res['payload'];

@@ -59,7 +59,8 @@ export class SongAddEditComponent implements OnInit, OnDestroy {
         Year: this._song.form.value.year,
         Length: this._song.form.value.length,
         Genre: this._song.form.value.genre,
-        Rating: null
+        Rating: null,
+        reviewCount: null
       };
       if (this._song.form.get('$key').value != 'modify') {
         this.subInsSong = this._http.insertSong(song).subscribe(

@@ -42,7 +42,9 @@ import { SongDetailComponent } from './song-table/song-detail/song-detail.compon
 import { AddReviewComponent } from './song-table/add-review/add-review.component';
 import {MatDividerModule} from '@angular/material/divider';
 import { PlaylistAddEditComponent } from './playlist-table/playlist-add-edit/playlist-add-edit.component';
-import {MatExpansionModule} from '@angular/material/expansion'
+import {MatExpansionModule} from '@angular/material/expansion';
+import { ReverifyComponent } from './login/reverify/reverify.component'
+
 
 
 // 2. Add your credentials from step 1
@@ -71,7 +73,8 @@ const firebaseConfig = {
     SnackbarComponent,
     SongDetailComponent,
     AddReviewComponent,
-    PlaylistAddEditComponent
+    PlaylistAddEditComponent,
+    ReverifyComponent
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,6 @@ const firebaseConfig = {
   ],
   providers: [HttpService, AuthGuard, SongService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent,AddReviewComponent,PlaylistAddEditComponent]
+  entryComponents: [ReviewComponent,SongAddEditComponent,SnackbarComponent,AddReviewComponent,PlaylistAddEditComponent,ReverifyComponent]
 })
 export class AppModule { }

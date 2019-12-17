@@ -12,4 +12,5 @@ export interface Song {
     Length: number;
     Genre: string;
     Rating: number;
+    reviewCount: number;
 }

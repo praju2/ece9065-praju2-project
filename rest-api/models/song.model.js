@@ -12,6 +12,7 @@ let songSchema = new Schema({
     Reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
     Rating: { type: Number, max: 5 },
     Hidden: { type: Boolean, required: true, default: false },
+    reviewCount :  { type: Number }
 }, { collection: 'songs' });
 
 songSchema.index({ Title: 'text', Artist: 'text', Album: 'text', Genre: 'text' }, {name: 'Song Index', weights: {Title: 10, Artist: 4, Album: 2, Genre: 1}});

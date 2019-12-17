@@ -69,6 +69,53 @@ exports.create_user = function (req, res, next) {
     });
 };
 
+//https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb
+exports.resend_verification = function (req, res, next) {
+
+    User.findOne({ email: req.body.email }, function (err, user) {
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!!' });
+        }
+        if (user.isVerified) {
+            return res.status(400).send({ msg: 'Account already verified. Please log in.' });
+        }
+
+        var transporter = nodemailer.createTransport({
+            host: "smtp-relay.sendinblue.com",
+            port: 587,
+            secure: false, // upgrade later with STARTTLS
+            auth: {
+                user: process.env.SENDINBLUE_USERNAME,
+                pass: process.env.SENDINBLUE_PASSWORD
+            }
+        });
+
+        transporter.verify(function (error, success) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Server is ready to take our messages");
+            }
+        });
+
+        var token = new Token({ _userId: user._id, token: require('crypto').randomBytes(16).toString('hex') });
+        // Save the verification token
+        token.save(function (err) {
+            if (err) {
+                return next(err);
+            } else {
+                var mailOptions = { from: 'no-reply@ece9065-praju2-project.com', to: user.email, subject: 'Account Verification', html: "<b>Hello </b></br><p>Please verify your account by clicking the link: <a href='http://" + req.headers.host + "/api/open/user/verify/" + token.token + "'>click here</a> </p>" };
+                transporter.sendMail(mailOptions, function (err) {
+                    if (err) { return res.status(500).send({ msg: err.message }); }
+                    //res.status(200).send('A verification email has been sent to ' + user.email + '.');
+                    res.status(200).send(user);
+                });
+            }
+        });
+
+    });
+};
+
 exports.verify_user = function (req, res, next) {
 
     // Find a matching token
@@ -110,7 +157,7 @@ exports.authenticate_user = function (req, res, next) {
             } else if (user.third_party) {
                 res.status(400).send({ type: 'auth-failed', msg: 'Use third party authentication' });
             }
-             else if (!user.isVerified) {
+            else if (!user.isVerified) {
                 res.status(400).send({ type: 'auth-failed', msg: 'Pending user verification' });
             }
             else if (!user.active) {

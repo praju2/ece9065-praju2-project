@@ -64,6 +64,7 @@ function addReview(req, res, next, song) {
                         if (err) return next(err);
                         song.Reviews.push(review._id);
                         song.Rating = Math.round(avgRating);
+                        song.reviewCount=i;
                         song.save(function (err, song) {
                             if (err) {
                                 return next(err);

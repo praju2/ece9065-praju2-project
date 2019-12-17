@@ -48,6 +48,11 @@ export class AuthService {
     return this.http.post<any>(this._loginUrl, user);
   }
 
+  resendVerification(user) {
+    console.log(user);
+    return this.http.post<any>(this._loginUrl+"/reverify", user);
+  }
+
 
 
   logoutUser() {

@@ -51,13 +51,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-console.log("got the req2");
+
 
 app.use('/api/open', open);
-//app.use('/api/admin',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('admin')], admin);
-app.use('/api/admin',admin);
-//app.use('/api/secure',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('user')], secure);
-app.use('/api/secure', secure);
+app.use('/api/admin',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('admin')], admin);
+app.use('/api/secure',[passport.authenticate('jwt', {session: false}),validateRouteAccess.minPermLvlRqd('user')], secure);
+
 
 
 const port = process.env.PORT ;

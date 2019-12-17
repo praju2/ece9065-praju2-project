@@ -11,7 +11,7 @@ exports.song_all = function (req, res, next) {
 
 //Top songs as per user rating and recent reviews
 exports.top_n_songs = function (req, res, next) {
-    Song.find({}).sort('-Rating').limit(10).populate({ path: 'Reviews', options: { sort: { _id: -1 }, limit: 2 }, populate: { path: 'user_id' } }).exec(function (err, item) {
+    Song.find({hidden:{$ne:false}}).sort('-Rating').limit(10).populate({ path: 'Reviews', options: { sort: { _id: -1 }, limit: 2 }, populate: { path: 'user_id' } }).exec(function (err, item) {
         if (err) return next(err);
         res.send(item);
     });
@@ -21,7 +21,8 @@ exports.top_n_songs = function (req, res, next) {
 //https://fusejs.io/
 exports.fuzzy_search = function (req, res, next) {
     Song.find(
-        { $text: { $search: req.params.search_key } },
+        {   hidden:{$ne:false},
+             $text: { $search: req.params.search_key } },
         { score: { $meta: "textScore" } }
     )
         .sort({ score: { $meta: 'textScore' } })
@@ -31,7 +32,7 @@ exports.fuzzy_search = function (req, res, next) {
                 res.send(item);
             }
             else {
-                Song.find({}).exec(function (err, item) {
+                Song.find({hidden:{$ne:false}}).exec(function (err, item) {
                     if (err) { return next(err); }
                     else {
                         var options = {
